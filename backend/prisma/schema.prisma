@@ -14,8 +14,94 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  id Int @id @default(autoincrement())
+model User {
+  id         Int           @id @default(autoincrement())
   first_name String
-  last_name String
+  last_name  String
+  email      String        @unique
+  password   String
+  image_url  String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  // Relations
+  dorms        Dorm[]       @relation("OwnerDorms")
+  requests     Request[]
+  rooms        Room[]       @relation("TenantRooms")
+  notifications Notification[]
+}
+
+model Dorm {
+  id          Int       @id @default(autoincrement())
+  owner_id    Int
+  dorm_name   String
+  location    String?
+  phone       String?
+  opening_time DateTime?  // Prisma ไม่มี Time type, ใช้ String หรือ DateTime
+  closing_time DateTime?
+  tech_code   String?
+  line_id     String
+  map_url     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  owner User @relation("OwnerDorms", fields: [owner_id], references: [id])
+  rooms Room[]
+}
+
+model Request {
+  id             Int           @id @default(autoincrement())
+  user_id        Int
+  topic          String
+  description    String
+  phone          String
+  request_date   DateTime
+  image_url      String?
+  submit_image_url String?
+  status         request_status
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  // Relations
+  user User @relation(fields: [user_id], references: [id])
+}
+
+enum request_status {
+  pending
+  canceled
+  in_progress
+  completed
+}
+
+model Room {
+  id        Int        @id @default(autoincrement())
+  user_id   Int
+  dorm_id   Int
+  number    Int
+  access_code String
+  status    room_status
+
+  // Relations
+  tenant User @relation("TenantRooms", fields: [user_id], references: [id])
+  dorm   Dorm @relation(fields: [dorm_id], references: [id])
+}
+
+enum room_status {
+  Available
+  Reported
+  Unavailable
+}
+
+model Notification {
+  id          Int       @id @default(autoincrement())
+  user_id     Int
+  topic       String
+  description String
+  image_url   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  user User @relation(fields: [user_id], references: [id])
 }

@@ -1,21 +1,37 @@
-# version: "3.8" # กำหนด docker version
+# version: "3.8"
+
 services:
-  # node-server:
-  #   container_name: node-js
-  #   build: .
-  #   ports:
-  #     - "8000:8000"
   db:
-    image: postgres:14
+    image: postgres:latest
     restart: always
     environment:
       POSTGRES_DB: repairo
       POSTGRES_USER: root
-      POSTGRES_PASSWORD: 1234
+      POSTGRES_PASSWORD: 123456
     ports:
-      - "5433:5432"
+      - "5433:5432"  # Windows ใช้ได้ตามปกติ
     volumes:
       - repairo_pg_data:/var/lib/postgresql/data
 
+  # pgadmin:
+  #   image: dpage/pgadmin4:latest
+  #   # platform: linux/amd64
+  #   container_name: pgadmin4_container
+  #   restart: always
+  #   ports:
+  #     - "8888:80"  # Windows ใช้ได้
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: repairo@gmail.com
+  #     PGADMIN_DEFAULT_PASSWORD: root1234
+  #   volumes:
+  #     - pgadmin-data:/var/lib/pgadmin/data
+  #   depends_on:
+  #     - db
+
+
 volumes:
   repairo_pg_data:
+  # pgadmin-data:
+
+
+
