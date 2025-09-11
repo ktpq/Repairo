@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Login from "./login/page";
+import Navbar from "./components/Navbar";
 
 export default function Home() {
   return (
-    <div></div>
+    <div><Navbar /></div>
   );
 }
