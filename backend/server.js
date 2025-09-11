@@ -13,6 +13,9 @@ app.use(bodyParser.json())
 const userRouter = require('./routers/userRouter')
 app.use("/api", userRouter)
 
+const authRouter = require('./routers/authRouter')
+app.use("/api", authRouter)
+
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`)
