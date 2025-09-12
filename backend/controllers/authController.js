@@ -9,6 +9,7 @@ exports.register = async (req, res) =>{
             message: "Register success",
             newUserRegister
         })
+        
     } catch (error){
         res.json({
             message: "Register failed",

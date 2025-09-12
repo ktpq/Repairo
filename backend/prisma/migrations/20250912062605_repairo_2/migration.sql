@@ -4,6 +4,9 @@ CREATE TYPE "public"."request_status" AS ENUM ('pending', 'canceled', 'in_progre
 -- CreateEnum
 CREATE TYPE "public"."room_status" AS ENUM ('Available', 'Reported', 'Unavailable');
 
+-- CreateEnum
+CREATE TYPE "public"."Role" AS ENUM ('Owner', 'Tenant', 'Technician');
+
 -- CreateTable
 CREATE TABLE "public"."User" (
     "id" SERIAL NOT NULL,
@@ -56,11 +59,11 @@ CREATE TABLE "public"."Request" (
 -- CreateTable
 CREATE TABLE "public"."Room" (
     "id" SERIAL NOT NULL,
-    "user_id" INTEGER NOT NULL,
+    "user_id" INTEGER,
     "dorm_id" INTEGER NOT NULL,
     "number" INTEGER NOT NULL,
     "access_code" TEXT NOT NULL,
-    "status" "public"."room_status" NOT NULL,
+    "status" "public"."room_status" NOT NULL DEFAULT 'Available',
 
     CONSTRAINT "Room_pkey" PRIMARY KEY ("id")
 );
@@ -78,8 +81,24 @@ CREATE TABLE "public"."Notification" (
     CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "public"."UserDormRole" (
+    "id" SERIAL NOT NULL,
+    "user_id" INTEGER NOT NULL,
+    "dorm_id" INTEGER NOT NULL,
+    "role" "public"."Role" NOT NULL,
+
+    CONSTRAINT "UserDormRole_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Room_access_code_key" ON "public"."Room"("access_code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserDormRole_user_id_dorm_id_key" ON "public"."UserDormRole"("user_id", "dorm_id");
 
 -- AddForeignKey
 ALTER TABLE "public"."Dorm" ADD CONSTRAINT "Dorm_owner_id_fkey" FOREIGN KEY ("owner_id") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -88,10 +107,16 @@ ALTER TABLE "public"."Dorm" ADD CONSTRAINT "Dorm_owner_id_fkey" FOREIGN KEY ("ow
 ALTER TABLE "public"."Request" ADD CONSTRAINT "Request_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Room" ADD CONSTRAINT "Room_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."Room" ADD CONSTRAINT "Room_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Room" ADD CONSTRAINT "Room_dorm_id_fkey" FOREIGN KEY ("dorm_id") REFERENCES "public"."Dorm"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Notification" ADD CONSTRAINT "Notification_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."UserDormRole" ADD CONSTRAINT "UserDormRole_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."UserDormRole" ADD CONSTRAINT "UserDormRole_dorm_id_fkey" FOREIGN KEY ("dorm_id") REFERENCES "public"."Dorm"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
