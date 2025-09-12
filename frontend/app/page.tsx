@@ -36,7 +36,7 @@ export default function Home() {
 
         <div className="col-span-10">
           <div className="flex items-center gap-3">
-            <h1 className="text-[#323034] font-bold text-5xl">Your Domitory</h1>
+            <h1 className="text-[#323034] font-bold text-5xl">Dormitory</h1>
             {/* ส่งฟังก์ชัน handleJoinDorm */}
             <JoinDormButton onJoin={handleJoinDorm} />
           </div>

@@ -151,7 +151,7 @@ export default function Navbar() {
                             </Link>
                             <button
                                 onClick={handleSignOut}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#E2F0FF]"
+                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#E2F0FF] cursor-pointer"
                             >
                                 Sign Out
                             </button>

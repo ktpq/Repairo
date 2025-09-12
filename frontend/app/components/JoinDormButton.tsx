@@ -41,7 +41,7 @@ export default function JoinDormButton({ onJoin }: JoinDormButtonProps) {
         onClick={() => setIsOpen(true)}
         className="ml-4 px-4 py-2 bg-[#3674B5] text-white font-medium rounded-lg hover:bg-sky-600 transition cursor-pointer"
       >
-        Join with code
+        # Join with code
       </button>
 
       {isOpen && (
