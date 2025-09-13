@@ -4,9 +4,9 @@ const dormService = require("../services/dormService")
 exports.getDormByUserId = async (req, res) =>{
     try{
         const user_id = req.user.user_id
-        const allRoom = await dormService.getDormByUserId(user_id);
-        res.json({
-            allRoom
+        const allRoomWithDorm = await dormService.getDormByUserId(user_id);
+        return res.json({
+            allRoomWithDorm
         })
     } catch (error){
         return res.json({
@@ -29,26 +29,27 @@ exports.createDorm = async (req, res) =>{
     }
 }
 
-exports.joinDorm = async (req, res) =>{
+exports.joinDormAsTenant = async (req, res) =>{
     try{
         const user_id = req.user.user_id
+        // ส่ง access code ไป
         const room = await dormService.isDormRoomExist(req.body)
         //  ไม่มีห้องนี้ในฐานข้อมูล
         if (!room){
             return res.json({
-                messaeg: "ไม่พบห้อง"
+                messaege: "ไม่พบห้อง"
             })
         }
-        
+
         // เช็คว่าห้องว่างมั้ย
         if (room.user_id !== null){
             return res.json({
                 message: "ห้องนี้มีคนอาศัยอยู่เเล้ว"
             })
         }
-        const newTenant = await dormService.joinDormByUserId(req.body, user_id);
+        const result = await dormService.joinDormAsTenant(req.body, user_id, room);
         res.json({
-            newTenant
+            result
         })
     } catch (error){
         res.json({
