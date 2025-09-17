@@ -1,0 +1,202 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
+import Navbar from "../components/Navbar"
+import Image from "next/image"
+
+export default function ReportForm() {
+    const searchParams = useSearchParams()
+    const reportId = searchParams.get("id")
+
+    const [topic, setTopic] = useState("")
+    const [description, setDescription] = useState("")
+    const [appointment, setAppointment] = useState("")
+    const [phone, setPhone] = useState("")
+    const [image, setImage] = useState<File | null>(null)
+    const [preview, setPreview] = useState<string | null>(null)
+
+    useEffect(() => {
+        if (reportId) {
+            setTopic("Leaking Faucet")
+            setDescription("The faucet in the kitchen is leaking and needs repair.")
+            setAppointment("2025-09-20T10:30")
+            setPhone("0812345678")
+        }
+    }, [reportId])
+
+    // update preview when image changes
+    useEffect(() => {
+        if (!image) {
+            setPreview(null)
+            return
+        }
+        const objectUrl = URL.createObjectURL(image)
+        setPreview(objectUrl)
+
+        // clean up URL object
+        return () => URL.revokeObjectURL(objectUrl)
+    }, [image])
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+        console.log({ topic, description, appointment, phone, image })
+    }
+
+    return (
+        <div className="overflow-hidden">
+            <Navbar />
+
+            <div className="grid grid-cols-12 mt-22 mb-4">
+                <div className="col-span-1"></div>
+
+                <div className="col-span-10">
+                    <div className="p-6 bg-white rounded-2xl shadow-xl max-h-[85vh] overflow-y-auto">
+                        <div className="flex items-center gap-3 mb-6">
+                            <Image
+                                src='/report-form-icon.png'
+                                alt="Report Form Icon"
+                                width={40}
+                                height={40}
+                                className="object-cover h-auto"
+                            />
+                            <h1 className="text-3xl font-bold text-[#3674B5]">
+                                {reportId ? "Edit Repair Request" : "Repair Request Form"}
+                            </h1>
+                        </div>
+
+                        {/* Form */}
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                            {/* Topic */}
+                            <div>
+                                <label className="block mb-1 font-medium text-gray-700">
+                                    Topic <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    value={topic}
+                                    onChange={(e) => setTopic(e.target.value)}
+                                    placeholder="Enter the topic of your request"
+                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3674B5]"
+                                    required
+                                />
+                            </div>
+
+                            {/* Description */}
+                            <div>
+                                <label className="block mb-1 font-medium text-gray-700">
+                                    Description <span className="text-red-500">*</span>
+                                </label>
+                                <textarea
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    placeholder="Provide a detailed description of the problem"
+                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 h-28 focus:outline-none focus:ring-2 focus:ring-[#3674B5]"
+                                    required
+                                />
+                            </div>
+
+                            {/* Appointment */}
+                            <div>
+                                <label className="block mb-1 font-medium text-gray-700">
+                                    Appointment Date & Time <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="datetime-local"
+                                    value={appointment}
+                                    onChange={(e) => setAppointment(e.target.value)}
+                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3674B5]"
+                                    required
+                                />
+                            </div>
+
+                            {/* Phone Number */}
+                            <div>
+                                <label className="block mb-1 font-medium text-gray-700">
+                                    Phone Number <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="tel"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                                    maxLength={10}
+                                    placeholder="Enter your phone number"
+                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3674B5]"
+                                    required
+                                />
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Maximum 10 digits
+                                </p>
+                            </div>
+
+                            {/* Image Upload */}
+                            <div>
+                                <label className="block mb-1 font-medium text-gray-700">
+                                    Attach Additional Image (optional)
+                                </label>
+                                <div className="flex items-center gap-4">
+                                    <input
+                                        type="file"
+                                        id="imageUpload"
+                                        accept="image/*"
+                                        onChange={(e) => setImage(e.target.files?.[0] || null)}
+                                        className="hidden"
+                                    />
+
+                                    <label
+                                        htmlFor="imageUpload"
+                                        className="flex items-center gap-2 px-3 py-1 bg-[#3674B5] text-white rounded-lg shadow-md hover:bg-sky-600 transition cursor-pointer text-sm"
+                                    >
+                                        {image ? "Change File" : "Choose File"}
+                                    </label>
+
+                                    {image && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setImage(null)}
+                                            className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm cursor-pointer"
+                                        >
+                                            Delete
+                                        </button>
+                                    )}
+
+                                    {image && (
+                                        <span className="text-sm text-gray-600 truncate max-w-xs">{image.name}</span>
+                                    )}
+                                </div>
+
+                                {preview && (
+                                    <div className="mt-3">
+                                        <img
+                                            src={preview}
+                                            alt="Preview"
+                                            className="w-auto h-44 object-cover rounded-lg border border-gray-300"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Submit + Cancel */}
+                            <div className="pt-4 flex justify-end gap-3">
+                                <button
+                                    type="button"
+                                    className="px-4 py-2 bg-gray-300 text-black rounded-lg hover:bg-gray-400 transition cursor-pointer"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-[#3674B5] text-white rounded-lg hover:bg-sky-600 transition cursor-pointer"
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div className="col-span-1"></div>
+            </div>
+        </div>
+    )
+}

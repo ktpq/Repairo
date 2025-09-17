@@ -28,12 +28,13 @@ export default function Completed() {
           </div>
           <div className="flex items-center gap-2">
             <span
-              className="bg-[#84DB84] text-white text-sm font-medium rounded-lg mr-4 flex items-center justify-center"
+              className="bg-[#33BF33] text-white text-sm font-medium rounded-lg mr-4 flex items-center justify-center"
               style={{ width: "100px", height: "28px" }}
             >
               Completed
             </span>
-            <button className="">
+            {/* Icon see history detail */}
+            <button className="cursor-pointer">
               <svg
                 width="20"
                 height="20"
