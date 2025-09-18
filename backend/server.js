@@ -21,8 +21,8 @@ app.use("/api", authRouter)
 const dormRouter = require('./routers/dormRouter')
 app.use("/api", dormRouter)
 
-
-
+const requestRouter = require('./routers/requestRouter')
+app.use("/api", requestRouter)
 
 
 app.listen(port, () => {

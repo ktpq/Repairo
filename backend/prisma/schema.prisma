@@ -50,11 +50,14 @@ model Dorm {
   owner User   @relation("OwnerDorms", fields: [owner_id], references: [id])
   rooms Room[]
   dormRoles UserDormRole[]
+  requests Request[] @relation("RequestDorm") 
 }
 
 model Request {
   id               Int            @id @default(autoincrement())
   user_id          Int
+  dorm_id          Int?
+  room_id          Int?
   topic            String
   description      String
   phone            String
@@ -67,7 +70,11 @@ model Request {
 
   // Relations
   user User @relation(fields: [user_id], references: [id])
+  dorm Dorm? @relation("RequestDorm", fields: [dorm_id], references: [id])
+  room Room? @relation("RequestRoom", fields: [room_id], references: [id])
 }
+
+
 
 enum request_status {
   pending
@@ -87,6 +94,7 @@ model Room {
   // Relations
   tenant User? @relation("TenantRooms", fields: [user_id], references: [id])
   dorm   Dorm @relation(fields: [dorm_id], references: [id])
+   requests Request[] @relation("RequestRoom")  // เพิ่มตรงนี้
 }
 
 enum room_status {
