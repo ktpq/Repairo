@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const dormController = require('../controllers/dormController')
-const authenticateToken  = require("../middlewares/middleware")
+const {authenticateToken}  = require("../middlewares/middleware")
 
 // แสดง ห้องที่ user อยู่
 router.get('/dorm', authenticateToken, dormController.getDormByUserId)

@@ -13,7 +13,7 @@ exports.register = async (req, res) =>{
     } catch (error){
         res.json({
             message: "Register failed",
-            error
+            "error": error.message
         })
     }
 }

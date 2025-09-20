@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const prisma = require('../prisma/prisma')
 
 const authenticateToken = (req, res, next) => {
     const token = req.cookies.authToken;
@@ -21,4 +22,34 @@ const authenticateToken = (req, res, next) => {
     }
 }
 
-module.exports = authenticateToken;
+const authorizeDormAccess = async (req, res, next) =>{
+    const user_id = req.user.user_id
+    const { dorm_id, room_id } = req.params
+    try{
+        const hasAccess = await prisma.room.findFirst({
+            where: {
+                user_id: Number(user_id),
+                dorm_id: Number(dorm_id),
+                id: Number(room_id)
+            }
+        })
+        
+        if (!hasAccess){
+            return res.json({
+                message: "คุณไม่มีสิทธิ์เข้าถึงหอและห้องนี้"
+            })
+        }
+
+        console.log("คุณมีสิทธิ์")
+        next();
+    } catch (error){
+        res.json({
+            "error": error.message
+        })
+    }
+}
+
+module.exports = {
+    authenticateToken,
+    authorizeDormAccess
+}
