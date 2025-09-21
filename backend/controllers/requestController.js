@@ -1,5 +1,36 @@
 const requestService = require('../services/requestService')
 
+exports.getAllRequest = async (req, res) => {
+    const { dorm_id } = req.params
+    try {
+        const allRequest = await requestService.getAllRequest(dorm_id)
+        return res.json({
+            message: "Get all request in dorm successfull",
+            allRequest
+        })
+    } catch(error){
+        res.json({
+            error: error.message
+        })
+    }
+}
+
+exports.getRequestById = async (req, res) => {
+    const { id, dorm_id, room_id } = req.params
+    const user_id = req.user.user_id;
+    try {
+        const request = await requestService.getRequestById(id);
+        res.json({
+            message: "Get request by id successful",
+            request
+        })
+    } catch (error){
+        res.json({
+            "error": error.message
+        })
+    }
+}
+
 exports.getIncompleteRequest = async (req, res) =>{
     const { dorm_id, room_id } = req.params
     const user_id = req.user.user_id
@@ -41,6 +72,34 @@ exports.createRequest =  async (req, res) =>{
         res.json({
             "message": "Create new request successful",
             newRequest
+        })
+    } catch (error){
+        res.json({
+            error: error.message
+        })
+    }
+}
+
+exports.changeRequestStatus = async (req, res) => {
+    try {
+        const result = await requestService.changeRequestStatus(req.body);
+        return res.json({
+            message: "Change request status success",
+            result
+        })
+    } catch (error){
+        return res.json({
+            error: error.message
+        })
+    }
+}
+
+exports.deleteRequestById = async (req, res) => {
+    try {
+        const result = await requestService.deleteRequestById(req.body);
+        return res.json({
+            message: "Delete request successfull",
+            result
         })
     } catch (error){
         res.json({

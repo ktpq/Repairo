@@ -49,7 +49,40 @@ const authorizeDormAccess = async (req, res, next) =>{
     }
 }
 
+const isAdminInDorm = async (req, res, next) => {
+    try {
+        const user_id = req.user.user_id;
+        const dorm_id = Number(req.params.dorm_id);
+
+        const userRole = await prisma.userDormRole.findFirst({
+            where: {
+                user_id: Number(user_id),
+                dorm_id: Number(dorm_id)
+            }
+        })
+
+        if (!userRole){
+            return res.json({
+                message: "คุณไม่ได้อยู่ในหอนี้"
+            })
+        }
+
+        if (userRole.role !== 'Owner' && userRole.role !== 'Technician'){
+            return res.json({
+                message: "แกไม่มีสิทธิ์"
+            })
+        }
+
+        next();
+    } catch (error){
+        return res.json({
+            error: error.message
+        })
+    }
+}
+
 module.exports = {
     authenticateToken,
-    authorizeDormAccess
+    authorizeDormAccess,
+    isAdminInDorm
 }

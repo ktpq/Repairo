@@ -24,6 +24,9 @@ app.use("/api", dormRouter)
 const requestRouter = require('./routers/requestRouter')
 app.use("/api", requestRouter)
 
+const roomRouter = require('./routers/roomRouter')
+app.use("/api", roomRouter)
+
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`)

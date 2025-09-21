@@ -1,6 +1,14 @@
 const prisma = require("../prisma/prisma");
 const { generateAccessCodes, generateTechCode } = require("../access_code");
 
+exports.getDormById = async (id) =>{
+    return await prisma.dorm.findUnique({
+        where:{
+          id: Number(id)
+        }
+    })
+}
+
 exports.getDormByUserId = async (user_id) => {
     return await prisma.room.findMany({
       where: {
@@ -15,6 +23,15 @@ exports.getDormByUserId = async (user_id) => {
         }
       }
     })
+}
+
+exports.getDormOwner = async (user_id) => {
+  return await prisma.userDormRole.findMany({
+    where: {
+      user_id: Number(user_id),
+      role: "Owner"
+    }
+  })
 }
 
 exports.createDorm = async (data, user_id) => {

@@ -1,5 +1,21 @@
 
+const { dorm } = require("../prisma/prisma")
 const dormService = require("../services/dormService")
+
+exports.getDormById = async (req, res) => {
+    const { id } = req.params
+    try{
+        const dorm = await dormService.getDormById(id)
+        res.json({
+            message: "get dorm by id success",
+            dorm
+        })
+    } catch (error){
+        return res.json({
+            "error": error.message
+        })
+    }
+}
 
 exports.getDormByUserId = async (req, res) =>{
     try{
@@ -12,6 +28,21 @@ exports.getDormByUserId = async (req, res) =>{
         return res.json({
             message: "Cannot fetch dorm by userId (from token)",
             error
+        })
+    }
+}
+
+exports.getDormOwner = async (req, res) => {
+    const user_id = req.user.user_id;
+    try{
+        const allDorm = await dormService.getDormOwner(user_id);
+        return res.json({
+            message: "Get all dorm owner successfull",
+            allDorm
+        })
+    } catch (error){
+        return res.json({
+            error: error.message
         })
     }
 }
