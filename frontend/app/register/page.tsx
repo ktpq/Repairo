@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 
 export default function RegisterPage() {
     const [firstName, setFirstName] = useState("")
@@ -8,6 +9,8 @@ export default function RegisterPage() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
@@ -43,8 +46,8 @@ export default function RegisterPage() {
                                     onChange={(e) => setFirstName(e.target.value)}
                                     required
                                     className="mt-1 w-full rounded-lg border border-white bg-transparent
-                   px-3 py-2 text-sm text-white placeholder-white
-                   focus:border-white focus:ring-2 focus:ring-white"
+                  px-3 py-2 text-sm text-white placeholder-white
+                  focus:border-white focus:ring-2 focus:ring-white"
                                     placeholder="Name"
                                 />
                             </div>
@@ -59,8 +62,8 @@ export default function RegisterPage() {
                                     onChange={(e) => setLastName(e.target.value)}
                                     required
                                     className="mt-1 w-full rounded-lg border border-white bg-transparent
-                   px-3 py-2 text-sm text-white placeholder-white
-                   focus:border-white focus:ring-2 focus:ring-white"
+                  px-3 py-2 text-sm text-white placeholder-white
+                  focus:border-white focus:ring-2 focus:ring-white"
                                     placeholder="Surname"
                                 />
                             </div>
@@ -77,44 +80,68 @@ export default function RegisterPage() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                                 className="mt-1 w-full rounded-lg border border-white bg-transparent
-                 px-3 py-2 text-sm text-white placeholder-white
-                 focus:border-white focus:ring-2 focus:ring-white"
+                px-3 py-2 text-sm text-white placeholder-white
+                focus:border-white focus:ring-2 focus:ring-white"
                                 placeholder="you@example.com"
                             />
                         </div>
 
                         {/* Password */}
-                        <div>
+                        <div className="flex flex-col">
                             <label className="block text-sm font-medium text-gray-100">
                                 Password
                             </label>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                className="mt-1 w-full rounded-lg border border-white bg-transparent
-                 px-3 py-2 text-sm text-white placeholder-white
-                 focus:border-white focus:ring-2 focus:ring-white"
-                                placeholder="Enter your password"
-                            />
+                            <div className="relative flex items-center mt-1">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    className="w-full rounded-lg border border-white bg-transparent px-3 py-2 text-sm text-white placeholder-white focus:border-white focus:ring-2 focus:ring-white pr-10"
+                                    placeholder="Enter your password"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 flex items-center justify-center h-full cursor-pointer"
+                                >
+                                    <Image
+                                        src={showPassword ? "/eye-slash.png" : "/eye.png"}
+                                        alt="toggle password"
+                                        width={20}
+                                        height={20}
+                                    />
+                                </button>
+                            </div>
                         </div>
 
                         {/* Confirm Password */}
-                        <div>
+                        <div className="flex flex-col">
                             <label className="block text-sm font-medium text-gray-100">
                                 Confirm Password
                             </label>
-                            <input
-                                type="password"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                required
-                                className="mt-1 w-full rounded-lg border border-white bg-transparent
-                 px-3 py-2 text-sm text-white placeholder-white
-                 focus:border-white focus:ring-2 focus:ring-white"
-                                placeholder="Re-enter your password"
-                            />
+                            <div className="relative flex items-center mt-1">
+                                <input
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    required
+                                    className="w-full rounded-lg border border-white bg-transparent px-3 py-2 text-sm text-white placeholder-white focus:border-white focus:ring-2 focus:ring-white pr-10"
+                                    placeholder="Re-enter your password"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="absolute right-3 flex items-center justify-center h-full cursor-pointer"
+                                >
+                                    <Image
+                                        src={showConfirmPassword ? "/eye-slash.png" : "/eye.png"}
+                                        alt="toggle password"
+                                        width={20}
+                                        height={20}
+                                    />
+                                </button>
+                            </div>
                         </div>
 
                         <button

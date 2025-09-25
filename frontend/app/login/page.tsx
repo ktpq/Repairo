@@ -22,7 +22,7 @@ export default function LoginPage() {
       <div className="flex justify-center items-center h-screen">
         <div className="w-full max-w-2xl rounded-3xl bg-white/5 backdrop-blur-sm p-8 shadow-lg ">
           <h1 className="mb-6 text-center text-4xl font-bold text-white">
-            Welcome to <span className="text-[#2B5D91] transition hover:text-blue-200">Repairo !</span>
+            Welcome to <span className="text-[#2B5D91]">Repairo !</span>
           </h1>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -52,7 +52,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 flex items-center justify-center h-full"
+                  className="absolute right-3 flex items-center justify-center h-full cursor-pointer"
                 >
                   <Image
                     src={showPassword ? "/eye-slash.png" : "/eye.png"}

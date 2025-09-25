@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 
-export default function ContactMapOverlay() {
+export default function Contact() {
     const mapUrl =
         "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.811013152172!2d100.77565737493228!3d13.729888886659674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x311d664988a1bedf%3A0xcc678f180e221cd0!2sKing%20Mongkut's%20Institute%20of%20Technology%20Ladkrabang!5e0!3m2!1sen!2sth!4v1758132208210!5m2!1sen!2sth"
 
