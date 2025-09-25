@@ -6,6 +6,8 @@ const { authenticateToken, authorizeDormAccess, isAdminInDorm }  = require("../m
 
 
 router.get("/room/:dorm_id", authenticateToken, isAdminInDorm, roomController.getAllRoomInDorm);
+router.put("/room/change-accesscode/:dorm_id", authenticateToken, isAdminInDorm, roomController.changeRoomAccessCode)
 
+router.put("/room/delete-user/:dorm_id", authenticateToken, isAdminInDorm, roomController.deleteUserInRoom);
 
 module.exports = router

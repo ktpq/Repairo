@@ -47,6 +47,21 @@ exports.getDormOwner = async (req, res) => {
     }
 }
 
+exports.getDormTechnician = async (req, res) => {
+    const user_id = req.user.user_id;
+    try {
+        const allDorm = await dormService.getDormTechnician(user_id);
+        return res.json({
+            message: "Get all dorm technician successfully",
+            allDorm
+        })
+    } catch (error) {
+        return res.json({
+            error: error.message
+        })
+    }
+}
+
 exports.createDorm = async (req, res) =>{
     try{
         const user_id = req.user.user_id
@@ -86,6 +101,31 @@ exports.joinDormAsTenant = async (req, res) =>{
         res.json({
             message: "เกิดข้อผิดพลาดในการเข้าร่วมหอพัก",
             "error": error.message
+        })
+    }
+}
+
+exports.joinDormAsTechnician = async (req, res) => {
+    const user_id = req.user.user_id;
+    const tech_code = req.body.tech_code
+    try {
+
+        const dorm = await dormService.getDormByTechCode(tech_code);
+
+        //  ถ้าหอนี้ไม่มีอยู่จริง
+        if (!dorm){
+            return res.json({
+                message: "หอนี้ไม่มีอยู่จริง"
+            })
+        }
+        const result = await dormService.joinDormAsTechnician(user_id, dorm)
+        return res.json({
+            message: "Join dorm as technician successfully",
+            result
+        })
+    } catch (error) {
+        return res.json({
+            error: error.message
         })
     }
 }

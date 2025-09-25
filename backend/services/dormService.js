@@ -20,7 +20,7 @@ exports.getDormByUserId = async (user_id) => {
             dorm_name: true,
             map_url: true
           }
-        }
+        },
       }
     })
 }
@@ -32,6 +32,15 @@ exports.getDormOwner = async (user_id) => {
       role: "Owner"
     }
   })
+}
+
+exports.getDormTechnician = async (user_id) => {
+    return await prisma.userDormRole.findMany({
+      where: {
+        user_id: Number(user_id),
+        role: "Technician"
+      }
+    })
 }
 
 exports.createDorm = async (data, user_id) => {
@@ -102,3 +111,21 @@ exports.isDormRoomExist = async (data) => {
     },
   });
 };
+
+exports.getDormByTechCode = async (tech_code) =>  {
+  return await prisma.dorm.findUnique({
+      where: {
+        tech_code: tech_code
+      }
+  })
+}
+
+exports.joinDormAsTechnician = async (user_id, dorm) => {
+    return await prisma.userDormRole.create({
+        data: {
+          user_id: Number(user_id),
+          dorm_id: Number(dorm.id),
+          role: "Technician"
+        }
+    })
+}

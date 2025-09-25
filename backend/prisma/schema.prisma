@@ -40,7 +40,7 @@ model Dorm {
   phone        String?
   // opening_time DateTime? // Prisma ไม่มี Time type, ใช้ String หรือ DateTime
   // closing_time DateTime?
-  tech_code    String?
+  tech_code    String? @unique
   line_id      String
   map_url      String
   createdAt    DateTime  @default(now())
