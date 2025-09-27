@@ -63,8 +63,9 @@ exports.changePassword = async (req, res) => {
 
 exports.changeName = async (req, res) =>{
     const user_id = req.user.user_id;
+    const image_path = req.file.path
     try{
-        const newName = await userService.changeName(user_id, req.body);
+        const newName = await userService.changeName(user_id, req.body, image_path);
         return res.json({
             message: "Change name successfull",
             newName
