@@ -1,3 +1,4 @@
+const { start } = require('repl')
 const prisma = require('../prisma/prisma')
 
 exports.getAllRequest = async (dorm_id) => {
@@ -51,13 +52,27 @@ exports.getCompleteRequest = async (dorm_id, room_id, user_id) =>{
     })
 }
 
-exports.getRequestById = async (id) =>{
-    return await prisma.request.findUnique({
-        where: {
-            id: Number(id)
-        }
-    })
-}
+exports.getRequestById = async (id) => {
+  return await prisma.request.findUnique({
+    where: {
+      id: Number(id),
+    },
+    include: {
+      technician: {
+        select: {
+          first_name: true,
+          last_name: true,
+        },
+      },
+      dorm: {
+        select: {
+          dorm_name: true,
+        },
+      },
+    },
+  });
+};
+
 
 exports.changeRequestStatus = async (data) => {
     return await prisma.request.update({
@@ -76,4 +91,108 @@ exports.deleteRequestById = async (data) => {
             id: Number(data.id)
         }
     })
+}
+
+exports.getNoHandRequest = async (dorm_id) => {
+    return await prisma.request.findMany({
+        where: {
+            dorm_id: Number(dorm_id),
+            technician_id: null
+        }
+    })
+}
+
+exports.handInRequest = async (id, user_id) => {
+    return await prisma.request.update({
+        where: {
+            id: Number(id)
+        },
+        data: {
+            technician_id: Number(user_id),
+            status: "in_progress"
+        }
+    });
+}
+
+exports.getIncompleteRequestForTechnician = async (dorm_id, user_id) => {
+    return await prisma.request.findMany({
+        where: {
+            dorm_id: Number(dorm_id),
+            technician_id: Number(user_id),
+            status :{
+                not: "completed"
+            }
+        }
+    })
+}
+
+exports.getCompleteRequestForTechnician = async (dorm_id, user_id) => {
+    return await prisma.request.findMany({
+        where: {
+            dorm_id: Number(dorm_id),
+            technician_id: Number(user_id),
+            status : "completed"
+        }
+    })
+}
+
+exports.getDashboardStatus = async (dorm_id) => {
+    const result = await prisma.$transaction(async (prisma) => {
+        const total_report = await prisma.request.count({
+            where: {
+                dorm_id: Number(dorm_id)
+            }
+        })
+        
+        // report ในเดือนนี้
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0,0,0,0)
+
+        const endOfMonth = new Date(startOfMonth)
+        endOfMonth.setMonth(endOfMonth.getMonth() + 1);
+
+        const total_report_thismonth = await prisma.request.count({
+        where: {
+                dorm_id: Number(dorm_id),
+                    createdAt: {
+                    gte: startOfMonth,
+                    lt: endOfMonth,
+                    },
+            },
+        });
+        const pending_report = await prisma.request.count({
+            where: {
+                status: "pending",
+                dorm_id: Number(dorm_id)
+            }
+        })
+
+        const inprogress_report = await prisma.request.count({
+            where: {
+                status: "in_progress",
+                dorm_id: Number(dorm_id)
+            }
+        })
+
+        const completed_report = await prisma.request.count({
+            where: {
+                status: "completed",
+                dorm_id: Number(dorm_id)
+            }
+        })
+
+        const cancled_report = await prisma.request.count({
+            where: {
+                status: "canceled",
+                dorm_id: Number(dorm_id)
+            }
+        })
+
+        const allReport = pending_report + inprogress_report + completed_report + cancled_report
+        const success_rate = (completed_report * 100) / allReport
+        return { total_report, total_report_thismonth, pending_report, inprogress_report, completed_report, cancled_report, success_rate }
+    })
+    return result
+    
 }

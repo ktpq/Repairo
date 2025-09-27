@@ -26,7 +26,9 @@ const authorizeDormAccess = async (req, res, next) =>{
     const user_id = req.user.user_id
     const { dorm_id, room_id } = req.params
     try{
-        const hasAccess = await prisma.room.findFirst({
+
+        // 1. เช็คว่าเป็นผู้เช่ามั้ย
+        const isTenant = await prisma.room.findFirst({
             where: {
                 user_id: Number(user_id),
                 dorm_id: Number(dorm_id),
@@ -34,14 +36,31 @@ const authorizeDormAccess = async (req, res, next) =>{
             }
         })
         
-        if (!hasAccess){
-            return res.json({
-                message: "คุณไม่มีสิทธิ์เข้าถึงหอและห้องนี้"
-            })
+        if (isTenant){
+            console.log("คุณเป็นผู้เช่าของหอ")
+            return next()
+        }
+        
+        // เช็คว่าเป็น admin หรือ ช่างมั้ย
+        const userRole = await prisma.userDormRole.findFirst({
+            where: {
+                user_id: Number(user_id),
+                dorm_id: Number(dorm_id),
+                role: { in: ["Owner", "Technician"] }
+            }
+        });
+
+        if (userRole) {
+            console.log("คุณเป็น technician ของหอ");
+            return next();
         }
 
-        console.log("คุณมีสิทธิ์")
-        next();
+        // ถ้าไม่ตรงเงื่อนไขใดเลย
+        return res.json({
+            message: "คุณไม่มีสิทธิ์เข้าถึงหอนี้"
+        });
+
+        
     } catch (error){
         res.json({
             "error": error.message
@@ -81,8 +100,32 @@ const isAdminInDorm = async (req, res, next) => {
     }
 }
 
+const isTechnicianInDorm = async (req, res, next) => {
+
+    const user_id = req.user.user_id;
+    const dorm_id = req.params.dorm_id;
+
+    const userRole = await prisma.userDormRole.findFirst({
+            where: {
+                user_id: Number(user_id),
+                dorm_id: Number(dorm_id),
+                role: { in: ["Owner", "Technician"] }
+            }
+        });
+
+        if (userRole) {
+            console.log("คุณเป็น technician ของหอ");
+            return next();
+        }
+
+        return res.json({
+            message: "คุณไม่ได้เป็น technician ของหอนี้"
+        })
+}
+
 module.exports = {
     authenticateToken,
     authorizeDormAccess,
-    isAdminInDorm
+    isAdminInDorm,
+    isTechnicianInDorm
 }

@@ -2,24 +2,59 @@ const express = require('express')
 const router = express.Router()
 
 const requestController = require('../controllers/requestController')
-const { authenticateToken, authorizeDormAccess, isAdminInDorm }  = require("../middlewares/middleware")
+const { authenticateToken, authorizeDormAccess, isAdminInDorm, isTechnicianInDorm }  = require("../middlewares/middleware")
+
+
+
+
+
+// ดู request ทั้งหมดในหอ
+router.get("/request/admin/all/:dorm_id", authenticateToken, isAdminInDorm ,requestController.getAllRequest)
+router.get("/request/admin/status/:dorm_id", authenticateToken, isAdminInDorm, requestController.getDashboardStatus)
+
+// ลบ request
+router.delete("/request/admin/:dorm_id", authenticateToken, isAdminInDorm, requestController.deleteRequestById)
+
+// ดู request ของตัวเอง (Incomplete / Complete)
+router.get("/request/tenant/incomplete/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getIncompleteRequest)
+router.get("/request/tenant/complete/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getCompleteRequest)
+router.get("/request/:id/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getRequestById)
+
+
+// สร้าง request ใหม่
+router.post("/request/tenant/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.createRequest)
+
+
+// ดู request ที่ยังไม่มีคนรับ
+router.get("/request/technician/nohand/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getNoHandRequest)
+
+// ดู request ของ technician ที่ยังไม่เสร็จ
+router.get("/request/technician/incomplete/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getIncompleteRequestForTechnician)
+router.get("/request/technician/complete/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getCompleteRequestForTechnician)
+// อัพเดตสถานะ / Hand-in
+router.put("/request/technician/change-status/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.changeRequestStatus)
+router.put("/request/technician/handin/:id/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.handInRequest)
+
 
 
 // Get request ทั้งหมด (แสดงในหน้า admin) -> maybe เกิด ปัญหา ขี้เกียจ เทส ;-;
-router.get("/request/all/:dorm_id", authenticateToken, isAdminInDorm ,requestController.getAllRequest)
+// router.get("/request/all/:dorm_id", authenticateToken, isAdminInDorm ,requestController.getAllRequest)
 
-// Get request แยก status
-router.get("/request/incomplete/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getIncompleteRequest)
-router.get("/request/complete/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getCompleteRequest)
-router.get("/request/:id/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getRequestById)
+// // Get request แยก status ของ user เเตละคน
+// router.get("/request/incomplete/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getIncompleteRequest)
+// router.get("/request/complete/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getCompleteRequest)
+// router.get("/request/:id/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getRequestById)
 
-router.post("/request/:dorm_id/:room_id", authenticateToken, authorizeDormAccess,  requestController.createRequest)
+// router.get("/request/nohand/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getNoHandRequest)
+// router.get("/request/technician/incomplete/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getIncompleteRequestForTechnician)
+
+// router.post("/request/:dorm_id/:room_id", authenticateToken, authorizeDormAccess,  requestController.createRequest)
 
 
-// route ของ admin อยู่จังสี้
-router.put("/request/change-status/:dorm_id", authenticateToken, isAdminInDorm, requestController.changeRequestStatus)
-
-router.delete("/request/:dorm_id", authenticateToken, isAdminInDorm, requestController.deleteRequestById)
+// // route ของ admin อยู่จังสี้
+// router.put("/request/change-status/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.changeRequestStatus)
+// router.put("/request/handin/:id/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.handInRequest)
+// router.delete("/request/:dorm_id", authenticateToken, isAdminInDorm, requestController.deleteRequestById)
 
 
 module.exports = router

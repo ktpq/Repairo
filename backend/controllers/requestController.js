@@ -107,3 +107,82 @@ exports.deleteRequestById = async (req, res) => {
         })
     }
 }
+
+exports.getNoHandRequest = async (req, res) => {
+    const dorm_id = req.params.dorm_id;
+    try{
+        const allRequest = await requestService.getNoHandRequest(dorm_id);
+        return res.json({
+            message: "Get nohand request successfully",
+            allRequest
+        })
+
+    } catch (error) {
+        return res.json({
+            error: error.message
+        })
+    }
+}
+
+exports.handInRequest  = async (req, res) =>{
+    const id = req.params.id;
+    const user_id = req.user.user_id;
+    try{
+        const result = await requestService.handInRequest(id, user_id)
+        return res.json({
+            message: "Hand-in request successfully",
+            result
+        })
+    } catch (error) {
+        return res.json({
+            error: error.message
+        })
+    }
+}
+
+exports.getIncompleteRequestForTechnician = async (req, res) => {
+    const user_id = req.user.user_id;
+    const dorm_id = req.params.dorm_id
+    try {
+        const allRequest = await requestService.getIncompleteRequestForTechnician(dorm_id, user_id)
+        return res.json({
+            message: "Get Incomplete request for technician successfully",
+            allRequest
+        })
+    } catch (error) {
+        return res.json({
+            error: error.message
+        })
+    }
+}
+
+exports.getCompleteRequestForTechnician = async (req, res) => {
+    const user_id = req.user.user_id;
+    const dorm_id = req.params.dorm_id
+    try {
+        const allRequest = await requestService.getCompleteRequestForTechnician(dorm_id, user_id)
+        return res.json({
+            message: "Get Incomplete request for technician successfully",
+            allRequest
+        })
+    } catch (error) {
+        return res.json({
+            error: error.message
+        })
+    }
+}
+
+exports.getDashboardStatus = async (req, res) => {
+    const dorm_id = req.params.dorm_id;
+    try {
+        const result = await requestService.getDashboardStatus(dorm_id)
+        return res.json({
+            message: "Get dashboard status successfully",
+            result
+        })
+    } catch (error){
+        return res.json({
+            error: error.message
+        })
+    }
+}

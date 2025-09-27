@@ -30,18 +30,35 @@ exports.getDormOwner = async (user_id) => {
     where: {
       user_id: Number(user_id),
       role: "Owner"
+    },
+    include: {
+      dorm: {
+        select: {
+          dorm_name: true,
+          map_url: true
+        }
+      }
     }
   })
 }
 
 exports.getDormTechnician = async (user_id) => {
-    return await prisma.userDormRole.findMany({
-      where: {
-        user_id: Number(user_id),
-        role: "Technician"
+  return await prisma.userDormRole.findMany({
+    where: {
+      user_id: Number(user_id),
+      role: "Technician"
+    },
+    include: {
+      dorm: {
+        select: {
+          dorm_name: true,
+          map_url: true
+        }
       }
-    })
+    }
+  })
 }
+
 
 exports.createDorm = async (data, user_id) => {
   const result = await prisma.$transaction(async (prisma) => {

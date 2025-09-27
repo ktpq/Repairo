@@ -29,8 +29,10 @@ model User {
   requests      Request[]
   rooms         Room[]         @relation("TenantRooms")
   notifications Notification[]
-  dormRoles UserDormRole[]
+  dormRoles     UserDormRole[]
+  technicianRequests Request[]  @relation("TechnicianRequests") // <-- เพิ่มตรงนี้
 }
+
 
 model Dorm {
   id           Int       @id @default(autoincrement())
@@ -58,6 +60,7 @@ model Request {
   user_id          Int
   dorm_id          Int?
   room_id          Int?
+  technician_id    Int?           // <-- เพิ่มตรงนี้
   topic            String
   description      String
   phone            String
@@ -72,6 +75,7 @@ model Request {
   user User @relation(fields: [user_id], references: [id])
   dorm Dorm? @relation("RequestDorm", fields: [dorm_id], references: [id])
   room Room? @relation("RequestRoom", fields: [room_id], references: [id])
+  technician User? @relation("TechnicianRequests", fields: [technician_id], references: [id]) // <-- relation
 }
 
 
