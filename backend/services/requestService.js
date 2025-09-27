@@ -12,17 +12,21 @@ exports.getAllRequest = async (dorm_id) => {
     })
 }
 
-exports.createRequest = async (dorm_id, room_id, user_id, data) =>{
+exports.createRequest = async (dorm_id, room_id, user_id, data, imagePath) =>{
+    const oriDate = data.request_date
+    const isoDate = new Date(oriDate.replace(" ", "T"));
+
     return await prisma.request.create({
         data: {
             user_id: Number(user_id),
             topic: data.topic,
             description: data.description,
             phone: data.phone,
-            request_date: data.request_date,
+            request_date: isoDate,
             status: "pending",
             dorm_id: Number(dorm_id),
-            room_id: Number(room_id)
+            room_id: Number(room_id),
+            image_url: imagePath
         }
     })
 }
@@ -93,7 +97,7 @@ exports.deleteRequestById = async (data) => {
     })
 }
 
-exports.getNoHandRequest = async (dorm_id) => {
+exports.getNoTechRequest = async (dorm_id) => {
     return await prisma.request.findMany({
         where: {
             dorm_id: Number(dorm_id),
@@ -102,7 +106,7 @@ exports.getNoHandRequest = async (dorm_id) => {
     })
 }
 
-exports.handInRequest = async (id, user_id) => {
+exports.acceptRequest = async (id, user_id) => {
     return await prisma.request.update({
         where: {
             id: Number(id)
@@ -195,4 +199,16 @@ exports.getDashboardStatus = async (dorm_id) => {
     })
     return result
     
+}
+
+exports.submitRequest = async (id, image_path) => {
+    return await prisma.request.update({
+        where: {
+            id: Number(id)
+        },
+        data: {
+            submit_image_url: image_path,
+            status: "completed"
+        }
+    })
 }

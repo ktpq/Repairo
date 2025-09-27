@@ -1,14 +1,16 @@
 const express = require('express')
+// const multer = require('multer');
+// const path = require('path');
 const router = express.Router()
 
 const requestController = require('../controllers/requestController')
-const { authenticateToken, authorizeDormAccess, isAdminInDorm, isTechnicianInDorm }  = require("../middlewares/middleware")
-
-
-
+const { authenticateToken, authorizeDormAccess, isAdminInDorm, isTechnicianInDorm, upload }  = require("../middlewares/middleware")
 
 
 // ดู request ทั้งหมดในหอ
+router.get("/request/technician/incomplete/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getIncompleteRequestForTechnician)
+router.get("/request/technician/complete/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getCompleteRequestForTechnician)
+
 router.get("/request/admin/all/:dorm_id", authenticateToken, isAdminInDorm ,requestController.getAllRequest)
 router.get("/request/admin/status/:dorm_id", authenticateToken, isAdminInDorm, requestController.getDashboardStatus)
 
@@ -22,19 +24,19 @@ router.get("/request/:id/:dorm_id/:room_id", authenticateToken, authorizeDormAcc
 
 
 // สร้าง request ใหม่
-router.post("/request/tenant/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.createRequest)
+router.post("/request/tenant/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, upload.single('image_url'), requestController.createRequest)
 
 
 // ดู request ที่ยังไม่มีคนรับ
-router.get("/request/technician/nohand/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getNoHandRequest)
+router.get("/request/technician/notech/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getNoTechRequest)
 
 // ดู request ของ technician ที่ยังไม่เสร็จ
-router.get("/request/technician/incomplete/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getIncompleteRequestForTechnician)
-router.get("/request/technician/complete/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getCompleteRequestForTechnician)
+
+
 // อัพเดตสถานะ / Hand-in
 router.put("/request/technician/change-status/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.changeRequestStatus)
-router.put("/request/technician/handin/:id/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.handInRequest)
-
+router.put("/request/technician/accept/:id/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.acceptRequest)
+router.put("/request/technician/submit/:id/:dorm_id", authenticateToken, isTechnicianInDorm, upload.single('submit_image_url'), requestController.submitRequest)
 
 
 // Get request ทั้งหมด (แสดงในหน้า admin) -> maybe เกิด ปัญหา ขี้เกียจ เทส ;-;

@@ -67,8 +67,11 @@ exports.createRequest =  async (req, res) =>{
     const { dorm_id, room_id } = req.params
     const user_id = req.user.user_id
     const data = req.body
+    console.log(req.file)
+    const imagePath = req.file ? req.file.path : null;
+
     try {
-        const newRequest = await requestService.createRequest(dorm_id, room_id, user_id, data);
+        const newRequest = await requestService.createRequest(dorm_id, room_id, user_id, data, imagePath);
         res.json({
             "message": "Create new request successful",
             newRequest
@@ -108,10 +111,10 @@ exports.deleteRequestById = async (req, res) => {
     }
 }
 
-exports.getNoHandRequest = async (req, res) => {
+exports.getNoTechRequest = async (req, res) => {
     const dorm_id = req.params.dorm_id;
     try{
-        const allRequest = await requestService.getNoHandRequest(dorm_id);
+        const allRequest = await requestService.getNoTechRequest(dorm_id);
         return res.json({
             message: "Get nohand request successfully",
             allRequest
@@ -124,13 +127,13 @@ exports.getNoHandRequest = async (req, res) => {
     }
 }
 
-exports.handInRequest  = async (req, res) =>{
+exports.acceptRequest  = async (req, res) =>{
     const id = req.params.id;
     const user_id = req.user.user_id;
     try{
-        const result = await requestService.handInRequest(id, user_id)
+        const result = await requestService.acceptRequest(id, user_id)
         return res.json({
-            message: "Hand-in request successfully",
+            message: "Accept request successfully",
             result
         })
     } catch (error) {
@@ -181,6 +184,22 @@ exports.getDashboardStatus = async (req, res) => {
             result
         })
     } catch (error){
+        return res.json({
+            error: error.message
+        })
+    }
+}
+
+exports.submitRequest = async (req, res) => {
+    const { id, dorm_id } = req.params;
+    const image_path = req.file.path
+    try {
+        const result = await requestService.submitRequest(id, image_path)
+        return res.json({
+            message: "Submit request successfully", 
+            result
+        })
+    } catch (error) {
         return res.json({
             error: error.message
         })

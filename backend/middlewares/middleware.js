@@ -1,5 +1,19 @@
 const jwt = require('jsonwebtoken')
 const prisma = require('../prisma/prisma')
+const multer = require('multer');
+const path = require('path');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/')  // โฟลเดอร์นี้ต้องสร้างไว้ล่วงหน้า
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, uniqueSuffix + path.extname(file.originalname))
+    }
+})
+
+const upload = multer({ storage: storage });
 
 const authenticateToken = (req, res, next) => {
     const token = req.cookies.authToken;
@@ -127,5 +141,6 @@ module.exports = {
     authenticateToken,
     authorizeDormAccess,
     isAdminInDorm,
-    isTechnicianInDorm
+    isTechnicianInDorm,
+    upload
 }
