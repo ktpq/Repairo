@@ -7,12 +7,12 @@ import Reported from "@/app/components/dorm/Reported";
 import Completed from "@/app/components/dorm/Completed";
 import Contact from "@/app/components/dorm/Contact";
 
-export default function Dorm() {
+export default function OwnedDorm() {
     const [page, setPage] = useState(0);
 
     return (
         <div>
-            <Navbar  />
+            <Navbar />
 
             <div className="grid grid-cols-12 my-28">
                 <div className="col-span-1"></div>

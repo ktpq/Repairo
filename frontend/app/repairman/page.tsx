@@ -1,9 +1,8 @@
 "use client";
 
-import Navbar from "./components/Navbar";
-import DormCard from "./components/DormCard";
-import JoinDormButton from "./components/JoinDormButton";
-import Repairman from "./repairman/page";
+import Navbar from "../components/Navbar";
+import JoinDormButton from "../components/JoinDormButton";
+import RepairmanCard from "../components/RepairmanCard";
 import { useState } from "react";
 
 interface Dorm {
@@ -12,16 +11,11 @@ interface Dorm {
   image: string;
 }
 
-export default function Home() {
+export default function Repairman() {
   const [dorms, setDorms] = useState<Dorm[]>([
     { id: 1, name: "Dorm A", image: "/mockup-dorm.png" },
     { id: 2, name: "Dorm B", image: "/mockup-dorm.png" },
-    { id: 3, name: "Dorm C", image: "/mockup-dorm.png" },
-    { id: 4, name: "Dorm D", image: "/mockup-dorm.png" },
-    { id: 5, name: "Dorm E", image: "/mockup-dorm.png" },
   ]);
-
-  const [page, setPage] = useState<"user" | "owned" | "repairman">("user");
 
   const handleJoinDorm = (newDorm: Dorm) => {
     setDorms((prev) => [...prev, newDorm]);
@@ -42,7 +36,7 @@ export default function Home() {
 
               <div className="flex flex-wrap gap-6 pt-8">
                 {dorms.map((dorm) => (
-                  <DormCard
+                  <RepairmanCard
                     key={dorm.id}
                     id={dorm.id}
                     imageSrc={dorm.image}
