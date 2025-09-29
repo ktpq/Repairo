@@ -47,7 +47,7 @@ export default function Navbar() {
     }
 
     return (
-        <nav className="fixed top-0 left-0 w-full flex items-center justify-between bg-white/10 backdrop-blur-sm px-6 py-3 shadow-md z-50">
+        <nav className="fixed top-0 left-0 w-full flex items-center justify-between bg-white px-6 py-3 shadow-md z-50">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
                 <Image src="/logo.png" alt="Repairo Logo" width={50} height={50} className="rounded-full" />

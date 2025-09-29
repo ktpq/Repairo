@@ -20,7 +20,7 @@ export default function RepairmanDorm() {
         <div className="col-span-10">
 
           <div className="flex items-center justify-between">
-            <h1 className="text-[#3674B5] font-bold text-5xl">Dormitory as Repairman</h1>
+            <h1 className="text-[#3674B5] font-bold text-5xl">Dormitory A</h1>
             <button
               type="button"
               className="px-4 py-2 bg-[#3674B5] rounded-xl hover:bg-sky-600 transition cursor-pointer"

@@ -25,7 +25,7 @@ export default function Owned() {
 
                 <div className="col-span-10">
                     <div className="flex items-center gap-3">
-                        <h1 className="text-[#323034] font-bold text-5xl">Dormitory</h1>
+                        <h1 className="text-[#323034] font-bold text-5xl">Dormitory as Admin</h1>
                         <CreateDormButton
                             onCreate={(newDorm) => setDorms((prev) => [...prev, newDorm])}
                         />

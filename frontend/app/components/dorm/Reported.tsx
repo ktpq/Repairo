@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { Edit } from "lucide-react";
 
 type Status = "Pending" | "In progress" | "Canceled";
 
@@ -9,6 +10,10 @@ interface Issue {
     date: string;
     issue: string;
     status: Status;
+}
+
+interface ReportedProps {
+    showEdit?: boolean; // 👈 เพิ่มตรงนี้
 }
 
 const mockData: Issue[] = [
@@ -24,7 +29,7 @@ const statusColors = {
     Canceled: "bg-[#E61D1D]",
 };
 
-export default function Reported() {
+export default function Reported({ showEdit = true }: ReportedProps) {
     return (
         <div className="space-y-3 mt-3">
             {mockData.map((item) => (
@@ -44,23 +49,14 @@ export default function Reported() {
                             {item.status}
                         </span>
 
-                        {/* Icon edit */}
-                        <Link href={`/report-form?id=${item.id}`}>
-                            <button className="me-2 cursor-pointer pt-2">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 35 35"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M5.17399 30.5346H29.8198C30.0132 30.5346 30.1987 30.4578 30.3354 30.321C30.4722 30.1843 30.549 29.9988 30.549 29.8054C30.549 29.612 30.4722 29.4266 30.3354 29.2898C30.1987 29.1531 30.0132 29.0763 29.8198 29.0763H5.17399C4.9806 29.0763 4.79514 29.1531 4.65839 29.2898C4.52165 29.4266 4.44482 29.612 4.44482 29.8054C4.44482 29.9988 4.52165 30.1843 4.65839 30.321C4.79514 30.4578 4.9806 30.5346 5.17399 30.5346ZM14.1602 25.0542C14.7759 24.881 15.3378 24.5549 15.7936 24.1063L29.7061 10.1938C30.1825 9.71544 30.45 9.06783 30.45 8.39271C30.45 7.7176 30.1825 7.06999 29.7061 6.59167L28.3352 5.23542C27.8498 4.77271 27.2049 4.51459 26.5342 4.51459C25.8635 4.51459 25.2186 4.77271 24.7332 5.23542L10.8207 19.1333C10.372 19.5868 10.0502 20.15 9.88732 20.7667L8.80816 24.7917C8.75742 24.9756 8.75633 25.1696 8.805 25.3541C8.85368 25.5385 8.95037 25.7068 9.08524 25.8417C9.29192 26.0442 9.5688 26.1591 9.85816 26.1625L14.1602 25.0542ZM14.7582 23.0708C14.4892 23.3444 14.1518 23.5408 13.7811 23.6396L12.3665 24.0188L10.9082 22.5604L11.2873 21.1458C11.388 20.7759 11.5841 20.439 11.8561 20.1688L12.4102 19.6292L15.3123 22.5313L14.7582 23.0708ZM16.3477 21.4958L13.4457 18.5938L23.2602 8.77917L26.1623 11.6813L16.3477 21.4958ZM28.6707 9.17292L27.1977 10.6458L24.2957 7.74375L25.7686 6.25625C25.9737 6.05143 26.2516 5.93638 26.5415 5.93638C26.8313 5.93638 27.1093 6.05143 27.3144 6.25625L28.6707 7.62709C28.8741 7.83291 28.9881 8.11063 28.9881 8.4C28.9881 8.68938 28.8741 8.96709 28.6707 9.17292Z"
-                                        fill="black"
-                                    />
-                                </svg>
-                            </button>
-                        </Link>
+                        {showEdit && (
+                            <Link href={`/report-form?id=${item.id}`}>
+                                <button className="me-2 cursor-pointer pt-2">
+                                    <Edit className="w-5 h-5" />
+                                </button>
+                            </Link>
+                        )}
+
 
                         {/* Icon see detail */}
                         <Link href={`/ticket-detail/${item.id}`}>
@@ -91,7 +87,8 @@ export default function Reported() {
                         </Link>
                     </div>
                 </div>
-            ))}
-        </div>
+            ))
+            }
+        </div >
     )
 }

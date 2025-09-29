@@ -19,6 +19,14 @@ const mockData: Issue[] = [
 
 export default function MyWork() {
     const [isOpen, setIsOpen] = useState(false);
+    const [preview, setPreview] = useState<string | null>(null);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setPreview(URL.createObjectURL(file));
+        }
+    };
 
     return (
         <div className="space-y-3 mt-3">
@@ -41,29 +49,49 @@ export default function MyWork() {
                         {isOpen && (
                             <div className="fixed inset-0 flex items-center justify-center bg-black/20 z-50">
                                 <div className="bg-white rounded-xl w-full max-w-lg shadow-lg overflow-hidden">
-                                    {/* หัวข้อ */}
-                                    <h2 className="text-lg font-bold text-white text-center bg-[#3674B5] py-3">
+                                    <h2 className="text-xl font-bold text-white text-center bg-[#3674B5] py-3">
                                         Submit your work
                                     </h2>
 
                                     <div className="p-6">
-                                        {/* ปุ่ม Choose File */}
+                                        {/* File */}
                                         <label className="w-full flex flex-col items-center px-4 py-6 bg-white text-[#3674B5] rounded-lg border-2 border-dashed border-[#3674B5] cursor-pointer hover:bg-[#f0f8ff] transition mb-6">
                                             <Upload className="h-8 w-8 mb-2 text-[#3674B5]" />
                                             <span className="font-medium">Choose a file</span>
-                                            <input type="file" className="hidden" />
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={handleFileChange}
+                                            />
                                         </label>
 
-                                        {/* ปุ่มกด */}
+                                        {/* Preview */}
+                                        {preview && (
+                                            <div className="my-4 flex justify-center">
+                                                <img
+                                                    src={preview}
+                                                    alt="Preview"
+                                                    className="max-w-full max-h-64 rounded-lg object-contain border"
+                                                />
+                                            </div>
+                                        )}
+
                                         <div className="flex justify-end space-x-2">
                                             <button
-                                                onClick={() => setIsOpen(false)}
+                                                onClick={() => {
+                                                    setIsOpen(false);
+                                                    setPreview(null);
+                                                }}
                                                 className="px-4 py-2 rounded-lg border hover:bg-gray-100 transition cursor-pointer"
                                             >
                                                 Cancel
                                             </button>
                                             <button
-                                                onClick={() => setIsOpen(false)}
+                                                onClick={() => {
+                                                    setIsOpen(false);
+                                                    setPreview(null);
+                                                }}
                                                 className="px-4 py-2 bg-[#3674B5] text-white rounded-lg hover:bg-sky-600 transition cursor-pointer"
                                             >
                                                 Hand in
@@ -73,8 +101,6 @@ export default function MyWork() {
                                 </div>
                             </div>
                         )}
-
-
 
                         {/* Icon see detail */}
                         <Link href={`/ticket-detail/${item.id}`}>

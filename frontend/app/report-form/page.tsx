@@ -77,7 +77,7 @@ export default function ReportForm() {
                                     value={topic}
                                     onChange={(e) => setTopic(e.target.value)}
                                     placeholder="Enter the topic of your request"
-                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3674B5]"
+                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#3674B5]"
                                     required
                                 />
                             </div>
@@ -91,7 +91,7 @@ export default function ReportForm() {
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                     placeholder="Provide a detailed description of the problem"
-                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 h-28 focus:outline-none focus:ring-2 focus:ring-[#3674B5]"
+                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 h-28 focus:ring-2 focus:ring-[#3674B5]"
                                     required
                                 />
                             </div>
@@ -105,7 +105,7 @@ export default function ReportForm() {
                                     type="datetime-local"
                                     value={appointment}
                                     onChange={(e) => setAppointment(e.target.value)}
-                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3674B5]"
+                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#3674B5]"
                                     required
                                 />
                             </div>
@@ -121,7 +121,7 @@ export default function ReportForm() {
                                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
                                     maxLength={10}
                                     placeholder="Enter your phone number"
-                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#3674B5]"
+                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#3674B5]"
                                     required
                                 />
                                 <p className="text-xs text-gray-500 mt-1">
