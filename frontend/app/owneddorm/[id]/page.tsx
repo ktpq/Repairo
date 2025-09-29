@@ -20,7 +20,7 @@ export default function OwnedDorm() {
                 <div className="col-span-10">
 
                     <div className="flex items-center justify-between">
-                        <h1 className="text-[#3674B5] font-bold text-5xl">Dormitory A</h1>
+                        <h1 className="text-[#3674B5] font-bold text-5xl">Dormitory as Admin</h1>
                         <Link href="/report-form" className="flex items-center space-x-2">
                             <button
                                 type="button"
