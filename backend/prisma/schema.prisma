@@ -14,8 +14,128 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  id Int @id @default(autoincrement())
+model User {
+  id         Int      @id @default(autoincrement())
   first_name String
-  last_name String
+  last_name  String
+  email      String   @unique
+  password   String
+  image_url  String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  dorms         Dorm[]         @relation("OwnerDorms")
+  requests      Request[]
+  rooms         Room[]         @relation("TenantRooms")
+  notifications Notification[]
+  dormRoles     UserDormRole[]
+  technicianRequests Request[]  @relation("TechnicianRequests") // <-- เพิ่มตรงนี้
 }
+
+
+model Dorm {
+  id           Int       @id @default(autoincrement())
+  owner_id     Int
+  dorm_name    String
+  location     String?
+  phone        String?
+  // opening_time DateTime? // Prisma ไม่มี Time type, ใช้ String หรือ DateTime
+  // closing_time DateTime?
+  tech_code    String? @unique
+  line_id      String
+  map_url      String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relations
+  owner User   @relation("OwnerDorms", fields: [owner_id], references: [id])
+  rooms Room[]
+  dormRoles UserDormRole[]
+  requests Request[] @relation("RequestDorm") 
+}
+
+model Request {
+  id               Int            @id @default(autoincrement())
+  user_id          Int
+  dorm_id          Int?
+  room_id          Int?
+  technician_id    Int?           // <-- เพิ่มตรงนี้
+  topic            String
+  description      String
+  phone            String
+  request_date     DateTime
+  image_url        String?
+  submit_image_url String?
+  status           request_status
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  // Relations
+  user User @relation(fields: [user_id], references: [id])
+  dorm Dorm? @relation("RequestDorm", fields: [dorm_id], references: [id])
+  room Room? @relation("RequestRoom", fields: [room_id], references: [id])
+  technician User? @relation("TechnicianRequests", fields: [technician_id], references: [id]) // <-- relation
+}
+
+
+
+enum request_status {
+  pending
+  canceled
+  in_progress
+  completed
+}
+
+model Room {
+  id          Int         @id @default(autoincrement())
+  user_id     Int?
+  dorm_id     Int
+  number      Int
+  access_code String @unique
+  status      room_status @default(Available)
+
+  // Relations
+  tenant User? @relation("TenantRooms", fields: [user_id], references: [id])
+  dorm   Dorm @relation(fields: [dorm_id], references: [id])
+   requests Request[] @relation("RequestRoom")  // เพิ่มตรงนี้
+}
+
+enum room_status {
+  Available
+  Reported
+  Unavailable
+}
+
+model Notification {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  topic       String
+  description String
+  image_url   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [user_id], references: [id])
+}
+
+model UserDormRole {
+  id      Int   @id @default(autoincrement())
+  user_id Int
+  dorm_id Int
+  role    Role
+
+  user User @relation(fields: [user_id], references: [id])
+  dorm Dorm @relation(fields: [dorm_id], references: [id])
+
+  @@unique([user_id, dorm_id]) // user คนเดียวต่อ dorm จะมี role เดียว
+}
+
+enum Role{
+    Owner
+    Tenant
+    Technician
+  }
+
+
