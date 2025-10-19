@@ -1,0 +1,37 @@
+  # version: "3.8"
+
+  services:
+    db:
+      container_name: repairo-db
+      image: postgres:latest
+      restart: always
+      environment:
+        POSTGRES_DB: repairo
+        POSTGRES_USER: root
+        POSTGRES_PASSWORD: 123456
+      ports:
+        - "5433:5432"  # Windows ใช้ได้ตามปกติ
+      volumes:
+        - repairo_pg_data:/var/lib/postgresql/data
+    backend:
+      container_name: repairo-backend
+      restart: always
+      build:
+        context: ./backend
+        dockerfile: Dockerfile
+      volumes:
+        - ./backend:/app
+        - /app/node_modules
+        - /app/prisma
+      env_file:
+        - ./backend/.env
+      ports:
+        - "8000:8000"
+      depends_on:
+        - db
+
+  volumes:
+    repairo_pg_data:
+
+
+
