@@ -51,7 +51,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
                 <Image src="/logo.png" alt="Repairo Logo" width={50} height={50} className="rounded-full" />
-                <span className="text-2xl font-bold text-[#3674B5]">Repairo</span>
+                <span className="text-2xl font-bold text-[#3674B5]"> Repairo </span>
             </Link>
 
             <div className="flex items-center space-x-6">
