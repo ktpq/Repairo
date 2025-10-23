@@ -2,9 +2,11 @@
 
 import Image from "next/image"
 import Link from "next/link"
+import axios from "axios"
 import { useState, useEffect, useRef } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { Wrench, Shield, Building2 } from "lucide-react"
+import { alertSuccess } from "../swal"
 
 export default function Navbar() {
     const router = useRouter() // redirect
@@ -15,14 +17,14 @@ export default function Navbar() {
     const [userImage, setUserImage] = useState<string | null>(null) // เก็บรูป profile ของ user
 
     // fetch user API
-    useEffect(() => {
-        async function fetchUser() {
-            const res = await fetch("/api/user")
-            const data = await res.json()
-            setUserImage(data.profileImage) // set user pic profile
-        }
-        fetchUser()
-    }, [])
+    // useEffect(() => {
+    //     async function fetchUser() {
+    //         const res = await fetch("/api/user")
+    //         const data = await res.json()
+    //         setUserImage(data.profileImage) // set user pic profile
+    //     }
+    //     fetchUser()
+    // }, [])
 
     // ใช้ ref check click นอก dropdown
     const profileRef = useRef<HTMLDivElement>(null)
@@ -42,7 +44,9 @@ export default function Navbar() {
 
     // Sign Out
     const handleSignOut = () => {
-        localStorage.removeItem("token") // ล้าง token
+        const base_api = process.env.NEXT_PUBLIC_API_URL
+        axios.post(`${base_api}/logout`, {}, { withCredentials: true })
+        alertSuccess("ออกจากระบบสําเร็จ")
         router.push("/login") // redirect login
     }
 

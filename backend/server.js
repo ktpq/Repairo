@@ -5,11 +5,16 @@ const port = 8000
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
+const cors = require('cors')
 
 // use section
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(cookieParser())
+app.use(cors({
+  origin: "http://localhost:3000", // ที่มาของ frontend
+  credentials: true, // อนุญาตให้ส่ง cookie
+}))
 
 // router section
 const userRouter = require('./routers/userRouter')

@@ -3,6 +3,8 @@
 import { useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import axios from "axios"
+import { alertSuccess, alertFailed } from "../swal"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -10,11 +12,20 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Login:", { email, password })
-    // Mock login: redirect to /home
-    router.push("/")
+    const base_api = process.env.NEXT_PUBLIC_API_URL
+    try{
+      const response = await axios.post(`${base_api}/login`, {email, password}, {withCredentials: true})
+      if (response.data.message === "ไม่พบผู้ใช้ในระบบ") {
+        return alertFailed(response.data.message)
+      }
+
+      alertSuccess("เข้าสู่ระบบสำเร็จ")
+      router.push("/")
+    } catch(error){
+        console.log(error)
+    }
   }
 
   return (

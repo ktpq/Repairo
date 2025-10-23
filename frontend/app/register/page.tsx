@@ -1,8 +1,10 @@
 "use client"
 
 import { useState } from "react"
+import { alertSuccess, alertFailed } from "../swal"
 import Image from "next/image"
-
+import axios from "axios"
+import { useRouter } from "next/navigation"
 export default function RegisterPage() {
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
@@ -11,15 +13,27 @@ export default function RegisterPage() {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const router = useRouter()
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        const base_api = process.env.NEXT_PUBLIC_API_URL
         if (password !== confirmPassword) {
-            alert("Passwords do not match!")
+            alertFailed("รหัสผ่านทั้ง 2 ช่องไม่ตรงกัน")
             return
         }
         console.log("Register:", { firstName, lastName, email, password })
         // call API register
+        try {
+            const response = await axios.post(`${base_api}/register`, { first_name: firstName, last_name: lastName, email: email, password: password })
+            if (response.data.error){
+                return alertFailed("มีผู้ใช้นี้ในระบบอยู่แล้ว")
+            }
+            alertSuccess("ลงทะเบียนสําเร็จ")
+            router.push("/login")
+        } catch (error){
+            console.log(error)
+            alertFailed("ลงทะเบียนไม่สําเร็จ")
+        }
     }
 
     return (

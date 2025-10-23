@@ -45,6 +45,7 @@ model Dorm {
   // closing_time DateTime?
   tech_code    String? @unique
   line_id      String
+  img_url       String?
   map_url      String
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt

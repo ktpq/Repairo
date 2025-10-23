@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { alertSuccess, alertFailed } from "../swal";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 interface Dorm {
     id: number;
@@ -21,20 +24,32 @@ export default function CreateDormButton({ onCreate }: CreateDormButtonProps) {
     const [rooms, setRooms] = useState("");
     const [mapLink, setMapLink] = useState("");
     const [lineID, setLineID] = useState("");
+    const router = useRouter()
 
-    const handleCreate = () => {
-        if (!name || !rooms || !mapLink || !lineID) return;
+    const handleCreate = async () => {
+        const base_api = process.env.NEXT_PUBLIC_API_URL
+        if (!name || !rooms || !mapLink || !lineID) return alertFailed("กรุณากรอกข้อมูลให้ครบถ้วน");
 
-        const newDorm: Dorm = {
-            id: Math.floor(Math.random() * 10000),
-            name,
-            image: "/mockup-dorm.png",
-            rooms: parseInt(rooms),
-            mapLink,
-            lineID,
-        };
-
-        onCreate(newDorm);
+        // const newDorm: Dorm = {
+        //     id: Math.floor(Math.random() * 10000),
+        //     name,
+        //     image: "/mockup-dorm.png",
+        //     rooms: parseInt(rooms),
+        //     mapLink,
+        //     lineID,
+        // };
+        
+        try {
+            const response = await axios.post(`${base_api}/dorm`, {dorm_name: name, dorm_room: rooms, dorm_mapurl: mapLink, dorm_line: lineID}, {withCredentials: true})
+            console.log(response.data)
+            alertSuccess("สร้างหอพักสําเร็จ").then(() => {
+                window.location.reload()
+            })  
+            
+        } catch (error){
+            return alertFailed("เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง");
+        }
+        
 
         // reset form
         setName("");

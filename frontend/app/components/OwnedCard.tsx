@@ -3,16 +3,13 @@
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 
-interface OwnedCardProps {
-  id: number
-  imageSrc: string
-  altText: string
-  title: string
-}
 
-export default function OwnedCard({ id, imageSrc, altText, title }: OwnedCardProps) {
+
+export default function OwnedCard({ id, imageSrc, altText, title }) {
   const router = useRouter()
-
+  if (!imageSrc){
+    imageSrc = "/mockup-dorm.png"
+  }
   const handleClick = () => {
     router.push(`/owneddorm/${id}`) // ไปยังหน้าหอพักเฉพาะ
   }
