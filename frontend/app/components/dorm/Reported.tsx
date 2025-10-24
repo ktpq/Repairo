@@ -1,45 +1,60 @@
 "use client"
 
 import Link from "next/link"
+import axios from "axios";
 import { Edit } from "lucide-react";
+import { useState, useEffect } from "react";
+import { formatDatetime } from "@/app/helper";
 
 type Status = "Pending" | "In progress" | "Canceled";
 
-interface Issue {
-    id: number;
-    date: string;
-    issue: string;
-    status: Status;
-}
+// interface Issue {
+//     id: number;
+//     date: string;
+//     issue: string;
+//     status: Status;
+// }
 
 interface ReportedProps {
     showEdit?: boolean; // 👈 เพิ่มตรงนี้
+    dorm_id: number
+    room_id: number
 }
 
-const mockData: Issue[] = [
-    { id: 1, date: "01/01/2025", issue: "ไฟกลางห้องเสีย", status: "Pending" },
-    { id: 2, date: "05/01/2025", issue: "แอร์ไม่เย็น", status: "In progress" },
-    { id: 3, date: "10/01/2025", issue: "ประตูห้องน้ำพัง", status: "Canceled" },
-    { id: 4, date: "15/01/2025", issue: "ปลั๊กไฟชำรุด", status: "Pending" },
-];
+// const mockData: Issue[] = [
+//     { id: 1, date: "01/01/2025", issue: "ไฟกลางห้องเสีย", status: "Pending" },
+//     { id: 2, date: "05/01/2025", issue: "แอร์ไม่เย็น", status: "In progress" },
+//     { id: 3, date: "10/01/2025", issue: "ประตูห้องน้ำพัง", status: "Canceled" },
+//     { id: 4, date: "15/01/2025", issue: "ปลั๊กไฟชำรุด", status: "Pending" },
+// ];
 
 const statusColors = {
-    Pending: "bg-[#FFA01B]",
-    "In progress": "bg-[#E3B600]",
-    Canceled: "bg-[#E61D1D]",
+    "pending": "bg-[#FFA01B]",
+    "in_progress": "bg-[#E3B600]",
+    "canceled": "bg-[#E61D1D]",
 };
 
-export default function Reported({ showEdit = true }: ReportedProps) {
+export default function Reported({ showEdit = true, dorm_id, room_id }: ReportedProps) {
+    const [allRequest, setAllRequest] = useState([])
+    useEffect(() => {
+        const fetchRequest = async () => {
+            const base_api = process.env.NEXT_PUBLIC_API_URL
+            const response = await axios.get(`${base_api}/request/tenant/incomplete/${dorm_id}/${room_id}`, {withCredentials: true})
+            setAllRequest(response.data.allRequest)
+        }
+        fetchRequest()
+    }, [])
     return (
         <div className="space-y-3 mt-3">
-            {mockData.map((item) => (
+            {/* {JSON.stringify(allRequest[0])} */}
+            {allRequest.map((item) => (
                 <div
                     key={item.id}
                     className="w-full border-2 rounded-lg h-12 flex items-center border-[#3674B5] px-4 justify-between"
                 >
                     <div className="flex items-center gap-4">
-                        <span>{item.date}</span>
-                        <span>{item.issue}</span>
+                        {formatDatetime(item.request_date)}
+                        <span>{item.topic}</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <span

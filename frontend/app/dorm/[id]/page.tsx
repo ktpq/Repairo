@@ -13,8 +13,8 @@ export default function Dorm() {
     const params = useParams()
     const searchParams = useSearchParams()
 
-    const dorm_id = params.id
-    const room_id = searchParams.get("room_id")
+    const dorm_id = Number(params.id)
+    const room_id = Number(searchParams.get("room_id"))
     return (
         <div>
             <Navbar  />
@@ -91,7 +91,7 @@ export default function Dorm() {
 
                     </div>
                     {page == 0 ?
-                        <Reported />
+                        <Reported dorm_id={dorm_id} room_id={room_id}/>
                         : page == 1 ?
                             <Completed />
                             :

@@ -3,12 +3,16 @@
 import axios from "axios"
 
 import { useState, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
+import { alertSuccess } from "../swal"
+
 import Navbar from "../components/Navbar"
 import Image from "next/image"
+import { routerServerGlobal } from "next/dist/server/lib/router-utils/router-server-context"
 
 export default function ReportForm() {
     const searchParams = useSearchParams()
+    const router = useRouter()
     const reportId = searchParams.get("id")
     const dorm_id = searchParams.get("dorm_id")
     const room_id = searchParams.get("room_id")
@@ -54,8 +58,11 @@ export default function ReportForm() {
         formData.append("phone", phone)
         formData.append("image_url", image || "")
 
-        const response = await axios.post(`${base_api}/request/tenant/${dorm_id}/${room_id}`, formData, {withCredentials: true})
-        console.log(response.data)
+        // สยิง api ส่งคำร้อง
+        await axios.post(`${base_api}/request/tenant/${dorm_id}/${room_id}`, formData, {withCredentials: true})
+        alertSuccess("ส่งคําร้องเรียบร้อยแล้ว").then(() => {
+            router.back()
+        })
     }
 
     return (

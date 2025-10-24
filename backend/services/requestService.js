@@ -40,7 +40,9 @@ exports.getIncompleteRequest = async (dorm_id, room_id, user_id) =>{
             status: {
                 not: "completed"
             }
-
+        },
+        orderBy: {
+            request_date: "asc"
         }
     })
 }
