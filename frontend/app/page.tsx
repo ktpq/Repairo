@@ -15,19 +15,22 @@ interface Dorm {
 }
 
 export default function Home() {
-  const [dorms, setDorms] = useState<Dorm[]>([
-    { id: 1, name: "Dorm A", image: "/mockup-dorm.png" },
-    { id: 2, name: "Dorm B", image: "/mockup-dorm.png" },
-    { id: 3, name: "Dorm C", image: "/mockup-dorm.png" },
-    { id: 4, name: "Dorm D", image: "/mockup-dorm.png" },
-    { id: 5, name: "Dorm E", image: "/mockup-dorm.png" },
-  ]);
+  
+  const [loading, setLoading] = useState(true)
+  const [allDorm, setAllDorm] = useState([])
 
   const [page, setPage] = useState<"user" | "owned" | "repairman">("user");
 
-  const handleJoinDorm = (newDorm: Dorm) => {
-    setDorms((prev) => [...prev, newDorm]);
-  };
+  useEffect(() => {
+    const fetchDorm = async () => {
+      const base_api = process.env.NEXT_PUBLIC_API_URL
+      const response = await axios.get(`${base_api}/dorm/user`, {withCredentials: true})
+      setAllDorm(response.data.allRoomWithDorm)
+      setLoading(false)
+    }
+    fetchDorm()
+  }, [])
+  
 
   return (
     <div>
@@ -35,23 +38,32 @@ export default function Home() {
       
       <div className="grid grid-cols-12 my-28">
         <div className="col-span-1"></div>
-
+        
         <div className="col-span-10">
               <div className="flex items-center gap-3">
+                {/* {JSON.stringify(allDorm)} */}
                 <h1 className="text-[#323034] font-bold text-5xl">Dormitory</h1>
-                <JoinDormButton onJoin={handleJoinDorm} />
+                <JoinDormButton/>
               </div>
 
               <div className="flex flex-wrap gap-6 pt-8">
-                {dorms.map((dorm) => (
+
+                {loading ? (
+                  <span className="loading loading-spinner loading-md mx-auto"></span>
+                ): (
+                  allDorm.map((dorm) => (
                   <DormCard
-                    key={dorm.id}
-                    id={dorm.id}
-                    imageSrc={dorm.image}
-                    altText={dorm.name}
-                    title={dorm.name}
-                  />
-                ))}
+                      key={dorm.id}
+                      id={dorm.id}
+                      imageSrc={dorm.image}
+                      altText={dorm.dorm.dorm_name}
+                      title={dorm.dorm.dorm_name}
+                    />
+                  ))
+                )}
+
+                
+
               </div>
 
         </div>

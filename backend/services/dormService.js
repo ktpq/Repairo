@@ -10,15 +10,17 @@ exports.getDormById = async (id) =>{
 }
 
 exports.getDormByUserId = async (user_id) => {
-    return await prisma.room.findMany({
+    return await prisma.userDormRole.findMany({
       where: {
-        user_id: user_id
+        user_id: Number(user_id),
+        role: "Tenant"
       },
       include: {
         dorm: {
           select: {
+            id: true,
             dorm_name: true,
-            map_url: true
+            img_url: true
           }
         },
       }

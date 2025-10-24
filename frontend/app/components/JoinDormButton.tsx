@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-
+import axios from "axios";
+import { alertSuccess, alertFailed } from "../swal";
 interface Dorm {
   id: number;
   name: string;
@@ -12,14 +13,34 @@ interface JoinDormButtonProps {
   onJoin: (newDorm: Dorm) => void;
 }
 
-export default function JoinDormButton({ onJoin }: JoinDormButtonProps) {
+export default function JoinDormButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [accessCode, setAccessCode] = useState("");
 
   const handleJoin = async () => {
-    if (!accessCode) return;
-
+    if (!accessCode) return alertFailed("กรุณากรอก access code");
     // ตัวอย่าง: เช็ค code กับ mock API (จริง ๆ ก็ fetch ไป backend)
+    try {
+      const base_api = process.env.NEXT_PUBLIC_API_URL
+      const response = await axios.post(`${base_api}/dorm/join/tenant`, { access_code: accessCode} , {withCredentials: true})
+
+
+      if (response.status === 200){
+          return alertSuccess("เข้าร่วมหอพักสำเร็จ").then(() => {
+              window.location.reload()
+          })
+      }
+      
+    } catch (error){
+        if (error.status === 404){
+          return alertFailed("ไม่พบหอพักนี้ในระบบ")
+        }
+        
+        if (error.status === 400){
+          return alertFailed("ห้องพักนี้มีคนอาศัยอยู่เเล้ว")
+        }
+        
+    }
     // สมมติว่าถ้า code ถูกต้อง จะได้ dorm object กลับมา
     // const mockDorm: Dorm = {
     //   id: Math.floor(Math.random() * 1000), // id ใหม่

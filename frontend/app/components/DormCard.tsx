@@ -12,7 +12,10 @@ interface DormCardProps {
 
 export default function DormCard({ id, imageSrc, altText, title }: DormCardProps) {
   const router = useRouter()
-
+  if (!imageSrc) {
+    imageSrc = "/mockup-dorm.png"
+  }
+  
   const handleClick = () => {
     router.push(`/dorm/${id}`) // ไปยังหน้าหอพักเฉพาะ
   }

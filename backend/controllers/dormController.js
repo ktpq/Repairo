@@ -1,5 +1,5 @@
 
-const { dorm } = require("../prisma/prisma")
+const { prisma } = require("../prisma/prisma")
 const dormService = require("../services/dormService")
 
 exports.getDormById = async (req, res) => {
@@ -82,19 +82,19 @@ exports.joinDormAsTenant = async (req, res) =>{
         const room = await dormService.isDormRoomExist(req.body)
         //  ไม่มีห้องนี้ในฐานข้อมูล
         if (!room){
-            return res.json({
+            return res.status(404).json({
                 messaege: "ไม่พบห้อง"
             })
         }
 
         // เช็คว่าห้องว่างมั้ย
         if (room.user_id !== null){
-            return res.json({
+            return res.status(400).json({
                 message: "ห้องนี้มีคนอาศัยอยู่เเล้ว"
             })
         }
         const result = await dormService.joinDormAsTenant(req.body, user_id, room);
-        res.json({
+        res.status(200).json({
             result
         })
     } catch (error){
