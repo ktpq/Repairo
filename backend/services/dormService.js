@@ -54,8 +54,9 @@ exports.getDormTechnician = async (user_id) => {
     include: {
       dorm: {
         select: {
+          id: true,
           dorm_name: true,
-          map_url: true
+          img_url: true
         }
       }
     }

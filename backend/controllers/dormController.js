@@ -114,7 +114,7 @@ exports.joinDormAsTechnician = async (req, res) => {
 
         //  ถ้าหอนี้ไม่มีอยู่จริง
         if (!dorm){
-            return res.json({
+            return res.status(404).json({
                 message: "หอนี้ไม่มีอยู่จริง"
             })
         }

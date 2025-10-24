@@ -12,6 +12,9 @@ interface RepairmanCardProps {
 
 export default function RepairmanCard({ id, imageSrc, altText, title }: RepairmanCardProps) {
     const router = useRouter()
+    if (!imageSrc) {
+        imageSrc = "/mockup-dorm.png"
+    }
 
     const handleClick = () => {
         router.push(`/repairmandorm/${id}`) // ไปยังหน้าหอพักเฉพาะ
