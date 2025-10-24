@@ -21,14 +21,14 @@ export default function JoinDormButton({ onJoin }: JoinDormButtonProps) {
 
     // ตัวอย่าง: เช็ค code กับ mock API (จริง ๆ ก็ fetch ไป backend)
     // สมมติว่าถ้า code ถูกต้อง จะได้ dorm object กลับมา
-    const mockDorm: Dorm = {
-      id: Math.floor(Math.random() * 1000), // id ใหม่
-      name: `Dorm ${accessCode.toUpperCase()}`,
-      image: "/mockup-dorm.png",
-    };
+    // const mockDorm: Dorm = {
+    //   id: Math.floor(Math.random() * 1000), // id ใหม่
+    //   name: `Dorm ${accessCode.toUpperCase()}`,
+    //   image: "/mockup-dorm.png",
+    // };
 
     // ส่ง dorm object กลับไปหน้า Home → เพิ่มการ์ด
-    onJoin(mockDorm);
+    // onJoin(mockDorm);
 
     // ปิด modal และล้าง input
     setIsOpen(false);

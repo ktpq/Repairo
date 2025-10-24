@@ -1,10 +1,12 @@
 "use client";
 
+import axios from "axios";
+
 import Navbar from "./components/Navbar";
 import DormCard from "./components/DormCard";
 import JoinDormButton from "./components/JoinDormButton";
 import Repairman from "./repairman/page";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Dorm {
   id: number;
@@ -30,7 +32,7 @@ export default function Home() {
   return (
     <div>
       <Navbar  />
-
+      
       <div className="grid grid-cols-12 my-28">
         <div className="col-span-1"></div>
 

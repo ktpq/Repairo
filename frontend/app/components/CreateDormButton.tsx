@@ -5,20 +5,11 @@ import { alertSuccess, alertFailed } from "../swal";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-interface Dorm {
-    id: number;
-    name: string;
-    image: string;
-    rooms: number;
-    mapLink: string;
-    lineID: string;
-}
 
-interface CreateDormButtonProps {
-    onCreate: (newDorm: Dorm) => void;
-}
 
-export default function CreateDormButton({ onCreate }: CreateDormButtonProps) {
+
+
+export default function CreateDormButton() {
     const [isOpen, setIsOpen] = useState(false);
     const [name, setName] = useState("");
     const [rooms, setRooms] = useState("");

@@ -2,9 +2,23 @@
 
 import Image from "next/image";
 import Navbar from "../components/Navbar";
-import { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { UserInterface } from "../interface";
 
 export default function Profile() {
+  
+  const [user, setUser] = useState<UserInterface>(null);
+
+  useEffect(() => {
+      const fetchProfile = async () => {
+        const base_api = process.env.NEXT_PUBLIC_API_URL
+        const response = await axios.get(`${base_api}/myuser`, {withCredentials: true})
+        setUser(response.data.user)
+      }
+      fetchProfile()
+  }, [])
+
   // mock data
   const userDorm = {
     dormName: "Condo A",
@@ -17,6 +31,7 @@ export default function Profile() {
     email: "username@gmail.com",
     avatar: "/default-avatar.png",
   });
+
 
   const [showModal, setShowModal] = useState(false);
   const [editProfileOpen, setEditProfileOpen] = useState(false);
@@ -51,7 +66,7 @@ export default function Profile() {
 
       <div className="grid grid-cols-12 my-28">
         <div className="col-span-1"></div>
-
+        {/* {JSON.stringify(user)} */}
         <div className="col-span-10">
           {/* Card condo + Room number */}
           <div className="inline-flex items-center space-x-2 bg-[#3674B5] px-3 py-2 rounded-xl shadow-md hover:shadow-lg transition">
@@ -86,7 +101,7 @@ export default function Profile() {
 
                 <div>
                   <h2 className="text-xl font-bold">
-                    {userProfile.firstName} {userProfile.lastName}
+                    {user?.first_name} {user?.last_name}
                   </h2>
                   <p className="text-gray-700 flex items-center">
                     <Image
@@ -96,7 +111,7 @@ export default function Profile() {
                       height={16}
                       className="h-4 w-4"
                     />
-                    <span className="ps-1">{userProfile.email}</span>
+                    <span className="ps-1">{user?.email}</span>
                   </p>
                 </div>
               </div>
@@ -156,9 +171,9 @@ export default function Profile() {
                     <label className="text-gray-700 font-medium">First name</label>
                     <input
                       type="text"
-                      value={userProfile.firstName}
+                      value={user.first_name}
                       onChange={(e) =>
-                        setUserProfile((prev) => ({ ...prev, firstName: e.target.value }))
+                        setUser((prev) => ({ ...prev, first_name: e.target.value }))
                       }
                       className="w-full border rounded-xl px-3 py-2"
                     />
@@ -167,9 +182,9 @@ export default function Profile() {
                     <label className="text-gray-700 font-medium">Last name</label>
                     <input
                       type="text"
-                      value={userProfile.lastName}
+                      value={user.last_name}
                       onChange={(e) =>
-                        setUserProfile((prev) => ({ ...prev, lastName: e.target.value }))
+                        setUser((prev) => ({ ...prev, last_name: e.target.value }))
                       }
                       className="w-full border rounded-xl px-3 py-2"
                     />

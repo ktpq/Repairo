@@ -1,6 +1,10 @@
-export interface UserDormRoleInterface {
-    id: number
-    user_id: number
-    dorm_id: number
-    role: string
+export interface UserInterface {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  image_url?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
