@@ -54,7 +54,8 @@ export default function Home() {
                   allDorm.map((dorm) => (
                   <DormCard
                       key={dorm.id}
-                      id={dorm.id}
+                      id={dorm.dorm.id}
+                      room_id={dorm.room_id}
                       imageSrc={dorm.image}
                       altText={dorm.dorm.dorm_name}
                       title={dorm.dorm.dorm_name}

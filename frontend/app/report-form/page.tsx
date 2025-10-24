@@ -1,5 +1,7 @@
 "use client"
 
+import axios from "axios"
+
 import { useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import Navbar from "../components/Navbar"
@@ -8,6 +10,9 @@ import Image from "next/image"
 export default function ReportForm() {
     const searchParams = useSearchParams()
     const reportId = searchParams.get("id")
+    const dorm_id = searchParams.get("dorm_id")
+    const room_id = searchParams.get("room_id")
+
 
     const [topic, setTopic] = useState("")
     const [description, setDescription] = useState("")
@@ -38,18 +43,27 @@ export default function ReportForm() {
         return () => URL.revokeObjectURL(objectUrl)
     }, [image])
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
+        const base_api = process.env.NEXT_PUBLIC_API_URL
         e.preventDefault()
         console.log({ topic, description, appointment, phone, image })
+        const formData = new FormData()
+        formData.append("topic", topic)
+        formData.append("description", description)
+        formData.append("request_date", appointment)
+        formData.append("phone", phone)
+        formData.append("image_url", image || "")
+
+        const response = await axios.post(`${base_api}/request/tenant/${dorm_id}/${room_id}`, formData, {withCredentials: true})
+        console.log(response.data)
     }
 
     return (
         <div className="overflow-hidden">
             <Navbar />
-
+            
             <div className="grid grid-cols-12 mt-22 mb-4">
                 <div className="col-span-1"></div>
-
                 <div className="col-span-10">
                     <div className="p-6 bg-white rounded-2xl shadow-xl max-h-[85vh] overflow-y-auto">
                         <div className="flex items-center gap-3 mb-6">

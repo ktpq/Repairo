@@ -124,36 +124,48 @@ export default function TicketDetail() {
                     </div>
 
                     {/* Ticket Details */}
-                    <div className="mt-6 space-y-6">
+                    <div className="mt-6 space-y-6 grid grid-cols-2">
                         {/* Description */}
-                        <div className="space-y-2">
-                            <h1 className="flex items-center gap-2 font-bold text-black text-2xl">
-                                <FileText className="w-6 h-6 text-black" />
-                                Description
-                            </h1>
-                            <p className="text-md mt-1 ml-8">{mockTicket.description}</p>
-                        </div>
+                        <section>
+                            <div className="space-y-2">
+                                <h1 className="flex items-center gap-2 font-bold text-black text-2xl">
+                                    <FileText className="w-6 h-6 text-black" />
+                                    Description
+                                </h1>
+                                <p className="text-md mt-1 ml-8">{mockTicket.description}</p>
+                            </div>
 
-                        {/* Reporter Information */}
-                        <div className="space-y-2">
-                            <h3 className="flex items-center gap-2 font-bold text-black text-2xl">
-                                <User className="w-6 h-6 text-black" />
-                                Reporter Information
-                            </h3>
-                            <p className="flex items-center gap-2 text-md mt-1 ml-8">
-                                <User className="w-5 h-5 text-gray-500" />
-                                {mockTicket.reporter.name}
-                            </p>
-                            <p className="flex items-center gap-2 text-md ml-8">
-                                <Phone className="w-5 h-5 text-gray-500" />
-                                {mockTicket.reporter.phone}
-                            </p>
-                            <p className="flex items-center gap-2 text-md ml-8">
-                                <Home className="w-5 h-5 text-gray-500" />
-                                {mockTicket.reporter.room}
-                            </p>
-                        </div>
+                            {/* Reporter Information */}
+                            <div className="space-y-2 mt-5">
+                                <h3 className="flex items-center gap-2 font-bold text-black text-2xl">
+                                    <User className="w-6 h-6 text-black" />
+                                    Reporter Information
+                                </h3>
+                                <p className="flex items-center gap-2 text-md mt-1 ml-8">
+                                    <User className="w-5 h-5 text-gray-500" />
+                                    {mockTicket.reporter.name}
+                                </p>
+                                <p className="flex items-center gap-2 text-md ml-8">
+                                    <Phone className="w-5 h-5 text-gray-500" />
+                                    {mockTicket.reporter.phone}
+                                </p>
+                                <p className="flex items-center gap-2 text-md ml-8">
+                                    <Home className="w-5 h-5 text-gray-500" />
+                                    {mockTicket.reporter.room}
+                                </p>
+                            </div>
+                        </section>
+
+                        <section>
+                            <img 
+                                src="/mockup-dorm.png" 
+                                alt="Dorm Image" 
+                                className="w-full max-w-md h-64 object-cover rounded-2xl border-4 border-[#3875b5] shadow-lg mx-auto"
+                                />
+                        </section>
                     </div>
+
+                    
                 </div>
 
                 <div className="col-span-1"></div>

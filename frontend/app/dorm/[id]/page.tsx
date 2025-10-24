@@ -1,6 +1,7 @@
 "use client"
 import Navbar from "@/app/components/Navbar";
 import { useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link"
 import Image from "next/image";
 import Reported from "@/app/components/dorm/Reported";
@@ -9,19 +10,22 @@ import Contact from "@/app/components/dorm/Contact";
 
 export default function Dorm() {
     const [page, setPage] = useState(0);
+    const params = useParams()
+    const searchParams = useSearchParams()
 
+    const dorm_id = params.id
+    const room_id = searchParams.get("room_id")
     return (
         <div>
             <Navbar  />
 
             <div className="grid grid-cols-12 my-28">
                 <div className="col-span-1"></div>
-
                 <div className="col-span-10">
 
                     <div className="flex items-center justify-between">
                         <h1 className="text-[#3674B5] font-bold text-5xl">Dormitory A</h1>
-                        <Link href="/report-form" className="flex items-center space-x-2">
+                        <Link href={`/report-form?dorm_id=${dorm_id}&room_id=${room_id}`} className="flex items-center space-x-2">
                             <button
                                 type="button"
                                 className="px-4 py-2 bg-[#3674B5] text-white rounded-xl hover:bg-[#E61D1D] transition cursor-pointer"

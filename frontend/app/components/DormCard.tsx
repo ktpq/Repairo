@@ -8,16 +8,17 @@ interface DormCardProps {
   imageSrc: string
   altText: string
   title: string
+  room_id: number
 }
 
-export default function DormCard({ id, imageSrc, altText, title }: DormCardProps) {
+export default function DormCard({ id, imageSrc, altText, title, room_id }: DormCardProps) {
   const router = useRouter()
   if (!imageSrc) {
     imageSrc = "/mockup-dorm.png"
   }
   
   const handleClick = () => {
-    router.push(`/dorm/${id}`) // ไปยังหน้าหอพักเฉพาะ
+    router.push(`/dorm/${id}?room_id=${room_id}`) // ไปยังหน้าหอพักเฉพาะ
   }
 
   return (

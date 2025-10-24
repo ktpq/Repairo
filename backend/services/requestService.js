@@ -25,7 +25,7 @@ exports.createRequest = async (dorm_id, room_id, user_id, data, imagePath) =>{
             request_date: isoDate,
             status: "pending",
             dorm_id: Number(dorm_id),
-            room_id: Number(room_id),
+            room_id: Number(room_id),   
             image_url: imagePath
         }
     })

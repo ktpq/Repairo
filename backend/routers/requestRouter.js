@@ -20,13 +20,12 @@ router.delete("/request/admin/:dorm_id", authenticateToken, isAdminInDorm, reque
 // ดู request ของตัวเอง (Incomplete / Complete)
 router.get("/request/tenant/incomplete/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getIncompleteRequest)
 router.get("/request/tenant/complete/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getCompleteRequest)
-router.get("/request/:id/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getRequestById)
-
-
 
 
 // ดู request ของ technician ที่ยังไม่เสร็จ
 
+// ดู request ที่ยังไม่มีคนรับ
+router.get("/request/technician/notech/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getNoTechRequest)
 
 // อัพเดตสถานะ / Hand-in
 router.put("/request/technician/change-status/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.changeRequestStatus)
@@ -36,9 +35,8 @@ router.put("/request/technician/submit/:id/:dorm_id", authenticateToken, isTechn
 // สร้าง request ใหม่
 router.post("/request/tenant/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, upload.single('image_url'), requestController.createRequest)
 
+router.get("/request/:id/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getRequestById)
 
-// ดู request ที่ยังไม่มีคนรับ
-router.get("/request/technician/notech/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getNoTechRequest)
 
 
 // Get request ทั้งหมด (แสดงในหน้า admin) -> maybe เกิด ปัญหา ขี้เกียจ เทส ;-;
