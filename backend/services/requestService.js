@@ -58,26 +58,32 @@ exports.getCompleteRequest = async (dorm_id, room_id, user_id) =>{
     })
 }
 
-exports.getRequestById = async (id) => {
-  return await prisma.request.findUnique({
-    where: {
-      id: Number(id),
-    },
-    include: {
-      technician: {
-        select: {
-          first_name: true,
-          last_name: true,
-        },
-      },
-      dorm: {
-        select: {
-          dorm_name: true,
-        },
-      },
-    },
-  });
-};
+        exports.getRequestById = async (id) => {
+        return await prisma.request.findUnique({
+            where: {
+            id: Number(id),
+            },
+            include: {
+            technician: {
+                select: {
+                first_name: true,
+                last_name: true,
+                },
+            },
+            dorm: {
+                select: {
+                dorm_name: true,
+                },
+            },
+            user: {
+                select: {
+                    first_name: true,
+                    last_name: true
+                }
+            }
+            },
+        });
+        };
 
 
 exports.changeRequestStatus = async (data) => {

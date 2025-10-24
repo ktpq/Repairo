@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useParams, useSearchParams } from "next/navigation";
 
 interface Issue {
     id: number;
@@ -22,6 +23,10 @@ const statusColors = {
 };
 
 export default function ReportedRPM() {
+    const params = useParams();
+    const searchParams = useSearchParams()
+    const dorm_id = Number(params.id)
+    const room_id = Number(searchParams.get("room_id"))
     return (
         <div className="space-y-3 mt-3">
             {mockData.map((item) => (

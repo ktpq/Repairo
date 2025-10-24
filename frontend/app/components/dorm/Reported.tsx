@@ -74,7 +74,7 @@ export default function Reported({ showEdit = true, dorm_id, room_id }: Reported
 
 
                         {/* Icon see detail */}
-                        <Link href={`/ticket-detail/${item.id}`}>
+                        <Link href={`/ticket-detail/${item.id}?dorm_id=${dorm_id}&room_id=${room_id}`}>
                             <button className="cursor-pointer pt-2">
                                 <svg
                                     width="20"

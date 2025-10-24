@@ -1,6 +1,10 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import axios from "axios"
+import { useRouter, useParams, useSearchParams } from "next/navigation"
+import { RequestInterface } from "@/app/interface"
+import { useState, useEffect } from "react"
+import { formatDatetime } from "@/app/helper"
 import { ArrowLeft, CalendarDays, Hammer, Clock, Wrench, Check, X, FileText, User, Phone, Home } from "lucide-react"
 import Navbar from "@/app/components/Navbar"
 
@@ -36,25 +40,51 @@ const mockTicket: Ticket = {
 
 export default function TicketDetail() {
     const router = useRouter()
-    const ticketStatus = mockTicket.status
+    const params = useParams()
+    const searchParams = useSearchParams()
 
+    const request_id = Number(params.id)
+    const dorm_id = Number(searchParams.get("dorm_id"))
+    const room_id = Number(searchParams.get("room_id"))
+    const [request, setRequest] = useState({} as RequestInterface)
+    
+    useEffect(() => {
+        // if (!request_id || !dorm_id || !room_id) return;
+        const fetchDetail = async () => {
+            const base_api = process.env.NEXT_PUBLIC_API_URL
+            const response = await axios.get(`${base_api}/request/${request_id}/${dorm_id}/${room_id}`, {withCredentials: true})
+            console.log(response.data)
+            setRequest(response.data.request)
+            // console.log(request_id, dorm_id, room_id)
+        }
+        fetchDetail()
+    }, [])
+
+
+
+
+    const ticketStatus = request.status
     const steps = [
         { label: "Pending", key: "pending", icon: <Clock className="w-6 h-6" /> },
-        { label: "In progress", key: "inprogress", icon: <Wrench className="w-6 h-6" /> },
+        { label: "In progress", key: "in_progress", icon: <Wrench className="w-6 h-6" /> },
         {
-            label: ticketStatus === "cancel" ? "Canceled" : "Completed",
+            label: ticketStatus === "canceled" ? "Canceled" : "Completed",
             key: "final",
-            icon: ticketStatus === "cancel" ? <X className="w-6 h-6" /> : <Check className="w-6 h-6" />,
+            icon: ticketStatus === "canceled" ? <X className="w-6 h-6" /> : <Check className="w-6 h-6" />,
         },
     ]
 
+    
     return (
         <div>
+            
             <Navbar />
+            
             <div className="grid grid-cols-12 my-26">
+                
                 <div className="col-span-1"></div>
-
                 <div className="col-span-10">
+                    
                     {/* Back button */}
                     <button
                         onClick={() => router.back()}
@@ -70,11 +100,11 @@ export default function TicketDetail() {
                         <div className="flex justify-between items-start">
                             <div>
                                 <h2 className="flex gap-2 text-2xl font-bold text-black mb-2">
-                                    Reported: <span>{mockTicket.title}</span>
+                                    Reported: <span>{request?.topic}</span>
                                 </h2>
                                 <p className="text-md mb-2 flex items-center gap-2">
                                     <CalendarDays className="w-4 h-4 text-black" />
-                                    Appointment: {mockTicket.appointment}
+                                    Appointment: {formatDatetime(request.request_date)}
                                 </p>
                                 <p className="text-md flex items-center gap-2">
                                     <Hammer className="w-4 h-4 text-black" />
@@ -83,7 +113,7 @@ export default function TicketDetail() {
                             </div>
                             <div className="flex gap-1 items-center text-sm text-gray-500">
                                 <Clock className="w-4 h-4" />
-                                {mockTicket.submittedDate}</div>
+                                {formatDatetime(request.createdAt)}</div>
                         </div>
 
                         {/* Status flow */}
@@ -98,8 +128,8 @@ export default function TicketDetail() {
                                     bgColor = "bg-[#3674B5]"
                                 }
                                 if (step.key === "final") {
-                                    if (ticketStatus === "complete") bgColor = "bg-green-500"
-                                    if (ticketStatus === "cancel") bgColor = "bg-red-500"
+                                    if (ticketStatus === "completed") bgColor = "bg-green-500"
+                                    if (ticketStatus === "canceled") bgColor = "bg-red-500"
                                 }
 
                                 return (
@@ -132,7 +162,7 @@ export default function TicketDetail() {
                                     <FileText className="w-6 h-6 text-black" />
                                     Description
                                 </h1>
-                                <p className="text-md mt-1 ml-8">{mockTicket.description}</p>
+                                <p className="text-md mt-1 ml-8">{request.description}</p>
                             </div>
 
                             {/* Reporter Information */}
@@ -143,15 +173,16 @@ export default function TicketDetail() {
                                 </h3>
                                 <p className="flex items-center gap-2 text-md mt-1 ml-8">
                                     <User className="w-5 h-5 text-gray-500" />
-                                    {mockTicket.reporter.name}
+                                    {request.user?.first_name} {request.user?.last_name}
                                 </p>
                                 <p className="flex items-center gap-2 text-md ml-8">
                                     <Phone className="w-5 h-5 text-gray-500" />
-                                    {mockTicket.reporter.phone}
+                                    {request.phone}
                                 </p>
                                 <p className="flex items-center gap-2 text-md ml-8">
                                     <Home className="w-5 h-5 text-gray-500" />
-                                    {mockTicket.reporter.room}
+                                    {request.dorm?.dorm_name}
+                                    
                                 </p>
                             </div>
                         </section>
@@ -170,6 +201,7 @@ export default function TicketDetail() {
 
                 <div className="col-span-1"></div>
             </div>
+            {JSON.stringify(request)}
         </div>
     )
 }
