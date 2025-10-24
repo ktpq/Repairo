@@ -100,7 +100,8 @@ model Room {
   // Relations
   tenant User? @relation("TenantRooms", fields: [user_id], references: [id])
   dorm   Dorm @relation(fields: [dorm_id], references: [id])
-   requests Request[] @relation("RequestRoom")  // เพิ่มตรงนี้
+  userDormRoles UserDormRole[]
+  requests Request[] @relation("RequestRoom")  // เพิ่มตรงนี้
 }
 
 enum room_status {
@@ -127,9 +128,11 @@ model UserDormRole {
   user_id Int
   dorm_id Int
   role    Role
+  room_id Int?
 
   user User @relation(fields: [user_id], references: [id])
   dorm Dorm @relation(fields: [dorm_id], references: [id])
+  room Room? @relation(fields: [room_id], references: [id])
 
   @@unique([user_id, dorm_id]) // user คนเดียวต่อ dorm จะมี role เดียว
 }

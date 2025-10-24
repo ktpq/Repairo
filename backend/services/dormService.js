@@ -116,7 +116,8 @@ exports.joinDormAsTenant = async (data, user_id, room) => {
           data:{
               user_id: user_id,
               dorm_id: room.dorm_id,
-              role: "Tenant"  
+              role: "Tenant",
+              room_id: Number(room.id)
           }
       })
 
