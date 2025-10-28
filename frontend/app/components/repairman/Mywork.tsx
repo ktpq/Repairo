@@ -6,32 +6,25 @@ import { useState, useEffect } from "react";
 import { Upload } from "lucide-react";
 import { RequestInterface } from "@/app/interface";
 import { formatDatetime } from "@/app/helper";
+import { alertSuccess } from "@/app/swal";
 
-interface Issue {
-    id: number;
-    date: string;
-    issue: string;
-}
+
 
 interface Props{
     dorm_id: number
 }
 
-const mockData: Issue[] = [
-    { id: 1, date: "01/01/2025", issue: "ไฟกลางห้องเสีย" },
-    { id: 2, date: "05/01/2025", issue: "แอร์ไม่เย็น" },
-    { id: 3, date: "10/01/2025", issue: "ประตูห้องน้ำพัง" },
-    { id: 4, date: "15/01/2025", issue: "ปลั๊กไฟชำรุด" },
-];
 
 export default function MyWork({dorm_id}: Props) {
     const [isOpen, setIsOpen] = useState(false);
     const [preview, setPreview] = useState<string | null>(null);
     const [allRequest, setAllRequest] = useState<RequestInterface[]>()
+    const [image, setImage] = useState<File | null>(null)
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setImage(file)
             setPreview(URL.createObjectURL(file));
         }
     };
@@ -45,6 +38,22 @@ export default function MyWork({dorm_id}: Props) {
         }
         fetchRequest()
     }, [])
+
+    const submitRequest = async (request_id: number) => {
+        console.log(request_id)
+        console.log(image)
+        const base_api = process.env.NEXT_PUBLIC_API_URL
+        try{
+            const formData = new FormData()
+            formData.append("image_url", image)
+            await axios.put(`${base_api}/request/technician/submit/${request_id}/${dorm_id}`, formData, {withCredentials: true})
+            alertSuccess("ยืนยันการแก้ไขเรียบร้อยแล้ว").then(() => {
+                window.location.reload()
+            })
+        } catch (error){
+            console.log(error.message)
+        }
+    }
 
     return (
         <div className="space-y-3 mt-3">
@@ -107,8 +116,8 @@ export default function MyWork({dorm_id}: Props) {
                                             </button>
                                             <button
                                                 onClick={() => {
-                                                    setIsOpen(false);
-                                                    setPreview(null);
+                                                    submitRequest(item.id)
+                                                    // setIsOpen(false)
                                                 }}
                                                 className="px-4 py-2 bg-[#3674B5] text-white rounded-lg hover:bg-sky-600 transition cursor-pointer"
                                             >

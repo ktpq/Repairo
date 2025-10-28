@@ -232,7 +232,13 @@ exports.getDashboardStatus = async (req, res) => {
 
 exports.submitRequest = async (req, res) => {
     const { id, dorm_id } = req.params;
-    const image_path = req.file.path
+    let image_path;
+    if (req.file){
+        image_path = req.file.path
+    } else {
+        image_path = null
+    }
+   
     try {
         const result = await requestService.submitRequest(id, image_path)
         return res.json({

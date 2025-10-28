@@ -32,7 +32,7 @@ router.get("/request/technician/notech/:dorm_id", authenticateToken, isTechnicia
 // อัพเดตสถานะ / Hand-in
 router.put("/request/technician/change-status/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.changeRequestStatus)
 router.put("/request/technician/accept/:id/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.acceptRequest)
-router.put("/request/technician/submit/:id/:dorm_id", authenticateToken, isTechnicianInDorm, upload.single('submit_image_url'), requestController.submitRequest)
+router.put("/request/technician/submit/:id/:dorm_id", authenticateToken, isTechnicianInDorm, upload.single('image_url'), requestController.submitRequest)
 
 // สร้าง request ใหม่
 router.post("/request/tenant/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, upload.single('image_url'), requestController.createRequest)

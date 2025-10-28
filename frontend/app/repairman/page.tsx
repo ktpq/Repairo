@@ -40,7 +40,7 @@ export default function Repairman() {
         <div className="col-span-10">
               <div className="flex items-center gap-3">
                 <h1 className="text-[#323034] font-bold text-5xl">Dormitory as Repairman</h1>
-                {JSON.stringify(allDorm)}
+                {/* {JSON.stringify(allDorm)} */}
                 <JoinDormButtonTech/>
               </div>
 
