@@ -65,7 +65,7 @@ export default function Reported({ showEdit = true, dorm_id, room_id }: Reported
                         </span>
 
                         {showEdit && (
-                            <Link href={`/report-form?id=${item.id}`}>
+                           <Link href={`/report-form?id=${item.id}&dorm_id=${dorm_id}&room_id=${room_id}`}>
                                 <button className="me-2 cursor-pointer pt-2">
                                     <Edit className="w-5 h-5" />
                                 </button>

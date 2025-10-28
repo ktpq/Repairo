@@ -25,14 +25,32 @@ export default function ReportForm() {
     const [image, setImage] = useState<File | null>(null)
     const [preview, setPreview] = useState<string | null>(null)
 
+    const [request, setRequest] = useState()
+
     useEffect(() => {
         if (reportId) {
-            setTopic("Leaking Faucet")
-            setDescription("The faucet in the kitchen is leaking and needs repair.")
-            setAppointment("2025-09-20T10:30")
-            setPhone("0812345678")
+            // setTopic("Leaking Faucet")
+            // setDescription("The faucet in the kitchen is leaking and needs repair.")
+            // setAppointment("2025-09-20T10:30")
+            // setPhone("0812345678")
+            const fetchUser = async () => {
+                const base_api = process.env.NEXT_PUBLIC_API_URL
+                const response = await axios.get(`${base_api}/request/${reportId}/${dorm_id}/${room_id}`, {withCredentials: true})
+                console.log(response.data)
+                setRequest(response.data.request)
+                setTopic(response.data.request.topic)
+                setDescription(response.data.request.description)
+                setPhone(response.data.request.phone)
+
+                const formatDate = response.data.request.request_date ? new Date(response.data.request.request_date).toISOString().slice(0, 16) : ""
+                setAppointment(formatDate)
+                setPreview(`http://localhost:8000/${response.data.request.image_url}`)
+                
+            }
+           fetchUser()
         }
-    }, [reportId])
+    }, [reportId, dorm_id, room_id])
+
 
     // update preview when image changes
     useEffect(() => {
@@ -48,9 +66,9 @@ export default function ReportForm() {
     }, [image])
 
     const handleSubmit = async (e: React.FormEvent) => {
-        const base_api = process.env.NEXT_PUBLIC_API_URL
         e.preventDefault()
-        console.log({ topic, description, appointment, phone, image })
+        const base_api = process.env.NEXT_PUBLIC_API_URL
+        // console.log({ topic, description, appointment, phone, image })
         const formData = new FormData()
         formData.append("topic", topic)
         formData.append("description", description)
@@ -68,7 +86,6 @@ export default function ReportForm() {
     return (
         <div className="overflow-hidden">
             <Navbar />
-            
             <div className="grid grid-cols-12 mt-22 mb-4">
                 <div className="col-span-1"></div>
                 <div className="col-span-10">

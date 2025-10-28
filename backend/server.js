@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 const app = express()
 const port = 8000
 
@@ -6,6 +7,8 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // use section
 app.use(morgan('dev'))
