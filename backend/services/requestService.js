@@ -160,9 +160,7 @@ exports.getIncompleteRequestForTechnician = async (dorm_id, user_id) => {
         where: {
             dorm_id: Number(dorm_id),
             technician_id: Number(user_id),
-            status :{
-                not: "completed"
-            }
+            status : "in_progress"
         }
     })
 }

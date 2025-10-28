@@ -184,7 +184,7 @@ export default function TicketDetail() {
                 </div>
                 <div className="col-span-1"></div>
             </div>
-            {JSON.stringify(request)}
+            {/* {JSON.stringify(request)} */}
         </div>
     )
 }

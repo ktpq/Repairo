@@ -1,13 +1,20 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 import { Upload } from "lucide-react";
+import { RequestInterface } from "@/app/interface";
+import { formatDatetime } from "@/app/helper";
 
 interface Issue {
     id: number;
     date: string;
     issue: string;
+}
+
+interface Props{
+    dorm_id: number
 }
 
 const mockData: Issue[] = [
@@ -17,9 +24,10 @@ const mockData: Issue[] = [
     { id: 4, date: "15/01/2025", issue: "ปลั๊กไฟชำรุด" },
 ];
 
-export default function MyWork() {
+export default function MyWork({dorm_id}: Props) {
     const [isOpen, setIsOpen] = useState(false);
     const [preview, setPreview] = useState<string | null>(null);
+    const [allRequest, setAllRequest] = useState<RequestInterface[]>()
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -28,16 +36,26 @@ export default function MyWork() {
         }
     };
 
+    useEffect(() => {
+        const fetchRequest = async () => {
+            const base_api = process.env.NEXT_PUBLIC_API_URL
+            const response = await axios.get(`${base_api}/request/technician/incomplete/${dorm_id}`, {withCredentials: true})
+            console.log(response.data)
+            setAllRequest(response.data.allRequest)
+        }
+        fetchRequest()
+    }, [])
+
     return (
         <div className="space-y-3 mt-3">
-            {mockData.map((item) => (
+            {allRequest && allRequest.map((item) => (
                 <div
                     key={item.id}
                     className="w-full border-2 rounded-lg h-12 flex items-center border-[#3674B5] px-4 justify-between"
                 >
                     <div className="flex items-center gap-4">
-                        <span>{item.date}</span>
-                        <span>{item.issue}</span>
+                        <span>{formatDatetime(item.request_date)}</span>
+                        <span>{item.topic}</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <button
@@ -103,7 +121,7 @@ export default function MyWork() {
                         )}
 
                         {/* Icon see detail */}
-                        <Link href={`/ticket-detail/${item.id}`}>
+                        <Link href={`/ticket-detail-repairman/${item.id}?dorm_id=${dorm_id}`}>
                             <button className="cursor-pointer pt-2">
                                 <svg
                                     width="20"

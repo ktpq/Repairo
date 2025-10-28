@@ -68,7 +68,7 @@ export default function RepairmanDorm() {
 
           {/* Render component ตาม page */}
           {page === 0 && <ReportedRPM dorm_id={dorm_id}/>}
-          {page === 1 && <MyWork />}
+          {page === 1 && <MyWork dorm_id={dorm_id} />}
           {page === 2 && <CompletedRPM />}
           {page === 3 && <Contact dorm_id={dorm_id}/>}
 
