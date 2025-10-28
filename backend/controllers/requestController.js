@@ -205,7 +205,7 @@ exports.getCompleteRequestForTechnician = async (req, res) => {
     try {
         const allRequest = await requestService.getCompleteRequestForTechnician(dorm_id, user_id)
         return res.json({
-            message: "Get Incomplete request for technician successfully",
+            message: "Get Complete request for technician successfully",
             allRequest
         })
     } catch (error) {

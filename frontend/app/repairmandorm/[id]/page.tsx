@@ -4,7 +4,7 @@ import { useState } from "react";
 import Contact from "@/app/components/dorm/Contact";
 import { CheckCircle, MessageCircle } from "lucide-react"
 import ReportedRPM from "@/app/components/repairman/ReportedRPM";
-import CompletedRPM from "@/app/components/repairman/Completed";
+import CompletedRPM from "@/app/components/repairman/CompletedRPM";
 import MyWork from "@/app/components/repairman/Mywork";
 
 import { useParams } from "next/navigation";
@@ -69,7 +69,7 @@ export default function RepairmanDorm() {
           {/* Render component ตาม page */}
           {page === 0 && <ReportedRPM dorm_id={dorm_id}/>}
           {page === 1 && <MyWork dorm_id={dorm_id} />}
-          {page === 2 && <CompletedRPM />}
+          {page === 2 && <CompletedRPM dorm_id={dorm_id}/>}
           {page === 3 && <Contact dorm_id={dorm_id}/>}
 
         </div>
