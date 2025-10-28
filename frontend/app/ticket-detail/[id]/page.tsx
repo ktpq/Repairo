@@ -174,7 +174,7 @@ export default function TicketDetail() {
 
                         <section>
                             <img 
-                                src="/mockup-dorm.png" 
+                                src={`http://localhost:8000/${request.image_url}`}
                                 alt="Dorm Image" 
                                 className="w-full max-w-md h-64 object-cover rounded-2xl border-4 border-[#3875b5] shadow-lg mx-auto"
                             />
