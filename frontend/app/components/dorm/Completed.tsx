@@ -1,10 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import axios from "axios"
+
+import Link from "next/link"
+import { formatDatetime } from "@/app/helper"
+import { useState, useEffect } from "react"
 
 interface Issue {
   date: string
   issue: string
+}
+
+interface ReportedProps {
+    dorm_id: number
+    room_id: number
 }
 
 const mockData: Issue[] = [
@@ -14,17 +23,27 @@ const mockData: Issue[] = [
   { date: "15/01/2025", issue: "ปลั๊กไฟชำรุด" },
 ]
 
-export default function Completed() {
+export default function Completed({dorm_id, room_id}: ReportedProps) {
+  const [completedRequest, setCompletedRequest] = useState([])
+  useEffect(() => {
+    const base_api = process.env.NEXT_PUBLIC_API_URL
+    const fetchRequest = async () => {
+      const response = await axios.get(`${base_api}/request/tenant/complete/${dorm_id}/${room_id}`, {withCredentials: true})
+      console.log("completed", response.data)
+      setCompletedRequest(response.data.allRequest)
+    }
+    fetchRequest()
+  }, [])
   return (
     <div className="space-y-3 mt-3">
-      {mockData.map((item, index) => (
+      {completedRequest.map((item, index) => (
         <div
-          key={index}
+          key={item.id}
           className="w-full border-2 rounded-lg h-12 flex items-center border-[#3674B5] px-4 justify-between"
         >
           <div className="flex items-center gap-4">
-            <span>{item.date}</span>
-            <span>{item.issue}</span>
+            <span>{formatDatetime(item.request_date)}</span>
+            <span>{item.topic}</span>
           </div>
           <div className="flex items-center gap-2">
             <span
@@ -34,7 +53,8 @@ export default function Completed() {
               Completed
             </span>
             {/* Icon see history detail */}
-            <button className="cursor-pointer">
+            <Link href={`/ticket-detail/${item.id}?dorm_id=${dorm_id}&room_id=${room_id}`}>
+              <button className="cursor-pointer">
               <svg
                 width="20"
                 height="20"
@@ -58,6 +78,7 @@ export default function Completed() {
                 />
               </svg>
             </button>
+            </Link>
           </div>
         </div>
       ))}

@@ -10,5 +10,7 @@ COPY prisma ./prisma
 RUN npx prisma generate
 
 EXPOSE 8000
+
 # ใช้คำสั่ง dev (nodemon)
+# test edit
 CMD ["npm", "run", "dev"]

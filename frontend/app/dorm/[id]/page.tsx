@@ -93,7 +93,7 @@ export default function Dorm() {
                     {page == 0 ?
                         <Reported dorm_id={dorm_id} room_id={room_id}/>
                         : page == 1 ?
-                            <Completed />
+                            <Completed dorm_id={dorm_id} room_id={room_id}/>
                             :
                             <Contact />
                     }
