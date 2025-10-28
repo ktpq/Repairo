@@ -83,6 +83,31 @@ exports.createRequest =  async (req, res) =>{
     }
 }
 
+exports.updateRequest = async (req, res) => {
+    const { id, dorm_id, room_id } = req.params
+    let imagePath;
+    if (req.file){
+        // ถ้าส่ง file มาให้ใช้อันใหม่
+        imagePath = req.file ? req.file.path : null;
+    } else {
+        // ถ้าไม่ได้ส่งไฟล์มาให้ใช้อันเดิม
+        const currentRequest = await requestService.getRequestById(id);
+        imagePath = currentRequest.image_url
+    }
+
+    try{
+        const result = await requestService.updateRequest(id, req.body, imagePath)
+        return res.json({
+            message: "Update request successfully",
+            result
+        })
+    } catch (error){
+        res.json({
+            error: error.message
+        })
+    }
+}
+
 exports.changeRequestStatus = async (req, res) => {
     try {
         const result = await requestService.changeRequestStatus(req.body);
@@ -220,3 +245,4 @@ exports.cancelRequest = async (req, res) => {
         })
     }
 }
+

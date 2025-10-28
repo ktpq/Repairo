@@ -31,6 +31,24 @@ exports.createRequest = async (dorm_id, room_id, user_id, data, imagePath) =>{
     })
 }
 
+exports.updateRequest = async (id, data, imagePath) => {
+    const oriDate = data.request_date
+    const isoDate = new Date(oriDate.replace(" ", "T"));
+
+    return await prisma.request.update({
+        where: {
+            id: Number(id)
+        },
+        data: {
+            topic: data.topic,
+            description: data.description,
+            phone: data.phone,
+            request_date: isoDate,
+            image_url: imagePath
+        }
+    })
+}
+
 exports.getIncompleteRequest = async (dorm_id, room_id, user_id) =>{
     return await prisma.request.findMany({
         where: {
@@ -58,32 +76,32 @@ exports.getCompleteRequest = async (dorm_id, room_id, user_id) =>{
     })
 }
 
-        exports.getRequestById = async (id) => {
-        return await prisma.request.findUnique({
-            where: {
-            id: Number(id),
+exports.getRequestById = async (id) => {
+    return await prisma.request.findUnique({
+        where: {
+        id: Number(id),
+        },
+        include: {
+        technician: {
+            select: {
+            first_name: true,
+            last_name: true,
             },
-            include: {
-            technician: {
-                select: {
+        },
+        dorm: {
+            select: {
+            dorm_name: true,
+            },
+        },
+        user: {
+            select: {
                 first_name: true,
-                last_name: true,
-                },
-            },
-            dorm: {
-                select: {
-                dorm_name: true,
-                },
-            },
-            user: {
-                select: {
-                    first_name: true,
-                    last_name: true
-                }
+                last_name: true
             }
-            },
-        });
-        };
+        }
+        },
+    });
+};
 
 
 exports.changeRequestStatus = async (data) => {

@@ -7,6 +7,8 @@ const requestController = require('../controllers/requestController')
 const { authenticateToken, authorizeDormAccess, isAdminInDorm, isTechnicianInDorm, upload }  = require("../middlewares/middleware")
 
 
+router.put("/request/tenant/:id/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, upload.single('image_url'), requestController.updateRequest)
+
 // ดู request ทั้งหมดในหอ
 router.get("/request/technician/incomplete/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getIncompleteRequestForTechnician)
 router.get("/request/technician/complete/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getCompleteRequestForTechnician)

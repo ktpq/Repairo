@@ -76,11 +76,24 @@ export default function ReportForm() {
         formData.append("phone", phone)
         formData.append("image_url", image || "")
 
-        // สยิง api ส่งคำร้อง
-        await axios.post(`${base_api}/request/tenant/${dorm_id}/${room_id}`, formData, {withCredentials: true})
-        alertSuccess("ส่งคําร้องเรียบร้อยแล้ว").then(() => {
-            router.back()
-        })
+        try{
+            if (reportId){
+                // ยิง api แก้ไขคําร้อง
+                const response = await axios.put(`${base_api}/request/tenant/${reportId}/${dorm_id}/${room_id}`, formData, {withCredentials: true})
+                alertSuccess("แก้ไขคําร้องเรียบร้อยแล้ว").then(() => {
+                    router.back()
+                })
+                
+            } else {
+                 // ยิง api ส่งคำร้อง
+                await axios.post(`${base_api}/request/tenant/${dorm_id}/${room_id}`, formData, {withCredentials: true})
+                alertSuccess("ส่งคําร้องเรียบร้อยแล้ว").then(() => {
+                    router.back()
+                })
+            }
+        } catch(error){
+            console.log(error.message)
+        }
     }
 
     return (
