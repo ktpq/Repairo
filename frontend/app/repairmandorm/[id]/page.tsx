@@ -7,18 +7,20 @@ import ReportedRPM from "@/app/components/repairman/Reported";
 import CompletedRPM from "@/app/components/repairman/Completed";
 import MyWork from "@/app/components/repairman/Mywork";
 
+import { useParams } from "next/navigation";
+
 export default function RepairmanDorm() {
   const [page, setPage] = useState(0);
-
+  const params = useParams()
+  const dorm_id = Number(params.id);
   return (
     <div>
       <Navbar />
-
+    
       <div className="grid grid-cols-12 my-28">
         <div className="col-span-1"></div>
 
         <div className="col-span-10">
-
           <div className="flex items-center justify-between">
             <h1 className="text-[#3674B5] font-bold text-5xl">Dormitory A</h1>
             <button
@@ -65,10 +67,10 @@ export default function RepairmanDorm() {
           </div>
 
           {/* Render component ตาม page */}
-          {page === 0 && <ReportedRPM />}
+          {page === 0 && <ReportedRPM dorm_id={dorm_id}/>}
           {page === 1 && <MyWork />}
           {page === 2 && <CompletedRPM />}
-          {page === 3 && <Contact />}
+          {page === 3 && <Contact dorm_id={dorm_id}/>}
 
         </div>
         <div className="col-span-1"></div>
