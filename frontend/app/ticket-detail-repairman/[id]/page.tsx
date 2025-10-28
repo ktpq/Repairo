@@ -17,17 +17,16 @@ export default function TicketDetail() {
 
     const request_id = Number(params.id)
     const dorm_id = Number(searchParams.get("dorm_id"))
-    const room_id = Number(searchParams.get("room_id"))
     const [request, setRequest] = useState({} as RequestInterface)
     
     useEffect(() => {
         const fetchDetail = async () => {
             const base_api = process.env.NEXT_PUBLIC_API_URL
-            const response = await axios.get(`${base_api}/request/${request_id}/${dorm_id}/${room_id}`, {withCredentials: true})
+            const response = await axios.get(`${base_api}/request/${request_id}/${dorm_id}`, {withCredentials: true})
             setRequest(response.data.request)
         }
         fetchDetail()
-    }, [request_id, dorm_id, room_id])
+    }, [request_id, dorm_id])
 
     const ticketStatus = request.status
 
@@ -55,9 +54,9 @@ export default function TicketDetail() {
         return "bg-[#D9D9D9]"
     }
 
-    const cancelRequest = async () => {
+    const acceptRequest = async () => {
         Swal.fire({
-            title: "คุณต้องการยกเลิกคําขอหรือไม่?",
+            title: "คุณต้องการรับคําขอหรือไม่?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -68,7 +67,7 @@ export default function TicketDetail() {
             if (result.isConfirmed) {
                  try{
                     const base_api = process.env.NEXT_PUBLIC_API_URL
-                    const response = await axios.put(`${base_api}/request/tenant/cancel/${request.id}` , {}, {withCredentials: true})
+                    const response = await axios.put(`${base_api}/request/technician/accept/${request_id}/${dorm_id}` , {}, {withCredentials: true})
                     console.log(response.data)
                     alertSuccess("ยกเลิกคำขอสำเร็จ").then(() => {
                         window.location.reload()
@@ -134,9 +133,9 @@ export default function TicketDetail() {
 
                         {/* Cancel button */}
                         <div className="flex justify-end mt-6">
-                            {request?.status !== "canceled" && request?.status !== "completed" && (
-                                <button className="bg-[#E61D1D] text-white px-4 py-1 rounded-lg hover:bg-red-700 transition cursor-pointer" onClick={cancelRequest}>
-                                    Cancel
+                            {request?.status !== "in_progress" && request?.status !== "completed" && (
+                                <button className="bg-[#3574b8] text-white px-4 py-1 rounded-lg hover:bg-red-700 transition cursor-pointer" onClick={acceptRequest}>
+                                    accept request
                                 </button>
                             )}
                         </div>

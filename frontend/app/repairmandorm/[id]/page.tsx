@@ -3,7 +3,7 @@ import Navbar from "@/app/components/Navbar";
 import { useState } from "react";
 import Contact from "@/app/components/dorm/Contact";
 import { CheckCircle, MessageCircle } from "lucide-react"
-import ReportedRPM from "@/app/components/repairman/Reported";
+import ReportedRPM from "@/app/components/repairman/ReportedRPM";
 import CompletedRPM from "@/app/components/repairman/Completed";
 import MyWork from "@/app/components/repairman/Mywork";
 

@@ -31,6 +31,21 @@ exports.getRequestById = async (req, res) => {
     }
 }
 
+exports.getRequestByIdTechnician = async (req, res) => {
+    const { id, dorm_id } = req.params
+    try{
+        const request = await requestService.getRequestById(id)
+        res.json({
+            message: "Get request by id successful (technician)",
+            request
+        })
+    } catch (error){
+        res.json({
+            error: error.message
+        })
+    }
+}
+
 exports.getIncompleteRequest = async (req, res) =>{
     const { dorm_id, room_id } = req.params
     const user_id = req.user.user_id

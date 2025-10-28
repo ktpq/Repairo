@@ -57,7 +57,7 @@ export default function ReportedRPM({dorm_id}: Props) {
                     <div className="flex items-center gap-2">
 
                         {/* Icon see detail */}
-                        <Link href={`/ticket-detail/${item.id}`}>
+                        <Link href={`/ticket-detail-repairman/${item.id}?dorm_id=${dorm_id}`}>
                             <button className="cursor-pointer pt-2">
                                 <svg
                                     width="20"

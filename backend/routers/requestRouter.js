@@ -38,7 +38,7 @@ router.put("/request/technician/submit/:id/:dorm_id", authenticateToken, isTechn
 router.post("/request/tenant/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, upload.single('image_url'), requestController.createRequest)
 
 router.get("/request/:id/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getRequestById)
-
+router.get("/request/:id/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getRequestByIdTechnician)
 
 
 // Get request ทั้งหมด (แสดงในหน้า admin) -> maybe เกิด ปัญหา ขี้เกียจ เทส ;-;
