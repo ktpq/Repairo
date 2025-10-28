@@ -1,11 +1,13 @@
 "use client"
 
 import axios from "axios"
+import Swal from "sweetalert2"
 import { useRouter, useParams, useSearchParams } from "next/navigation"
 import { RequestInterface } from "@/app/interface"
 import { useState, useEffect } from "react"
 import { formatDatetime } from "@/app/helper"
 import { ArrowLeft, CalendarDays, Hammer, Clock, Wrench, Check, X, FileText, User, Phone, Home } from "lucide-react"
+import { alertSuccess, alertChoice } from "@/app/swal"
 import Navbar from "@/app/components/Navbar"
 
 export default function TicketDetail() {
@@ -51,6 +53,32 @@ export default function TicketDetail() {
             if (ticketStatus === "canceled") return "bg-red-500"
         }
         return "bg-[#D9D9D9]"
+    }
+
+    const cancelRequest = async () => {
+        Swal.fire({
+            title: "คุณต้องการยกเลิกคําขอหรือไม่?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ยืนยัน",
+            cancelButtonText: "ยกเลิก"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                 try{
+                    const base_api = process.env.NEXT_PUBLIC_API_URL
+                    const response = await axios.put(`${base_api}/request/tenant/cancel/${request.id}` , {}, {withCredentials: true})
+                    console.log(response.data)
+                    alertSuccess("ยกเลิกคำขอสำเร็จ").then(() => {
+                        window.location.reload()
+                    })
+                } catch (error){
+                    console.log(error.message)
+                }
+            }
+        });
+       
     }
 
     return (
@@ -105,9 +133,11 @@ export default function TicketDetail() {
 
                         {/* Cancel button */}
                         <div className="flex justify-end mt-6">
-                            <button className="bg-[#E61D1D] text-white px-4 py-1 rounded-lg hover:bg-red-700 transition cursor-pointer">
-                                Cancel
-                            </button>
+                            {request?.status !== "canceled" && request?.status !== "completed" && (
+                                <button className="bg-[#E61D1D] text-white px-4 py-1 rounded-lg hover:bg-red-700 transition cursor-pointer" onClick={cancelRequest}>
+                                    Cancel
+                                </button>
+                            )}
                         </div>
                     </div>
 

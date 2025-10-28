@@ -20,7 +20,7 @@ router.delete("/request/admin/:dorm_id", authenticateToken, isAdminInDorm, reque
 // ดู request ของตัวเอง (Incomplete / Complete)
 router.get("/request/tenant/incomplete/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getIncompleteRequest)
 router.get("/request/tenant/complete/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getCompleteRequest)
-
+router.put("/request/tenant/cancel/:id", authenticateToken, requestController.cancelRequest)
 
 // ดู request ของ technician ที่ยังไม่เสร็จ
 

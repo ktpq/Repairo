@@ -97,6 +97,17 @@ exports.changeRequestStatus = async (data) => {
     })
 }
 
+exports.cancelRequest = async (id) => {
+    return await prisma.request.update({
+        where: {
+            id: Number(id)
+        },
+        data: {
+            status: "canceled"
+        }
+    })
+}
+
 exports.deleteRequestById = async (data) => {
     return await prisma.request.delete({
         where: {

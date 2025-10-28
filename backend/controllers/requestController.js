@@ -205,3 +205,18 @@ exports.submitRequest = async (req, res) => {
         })
     }
 }
+
+exports.cancelRequest = async (req, res) => {
+    const { id } = req.params
+    try{
+        const result = await requestService.cancelRequest(id)
+        return res.json({
+            message: "Cancel request successfully",
+            result
+        })
+    } catch (error){
+        res.json({
+            error: error.message
+        })
+    }
+}
