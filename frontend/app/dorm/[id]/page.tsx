@@ -95,7 +95,7 @@ export default function Dorm() {
                         : page == 1 ?
                             <Completed dorm_id={dorm_id} room_id={room_id}/>
                             :
-                            <Contact />
+                            <Contact dorm_id={dorm_id}/>
                     }
 
 
