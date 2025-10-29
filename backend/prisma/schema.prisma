@@ -95,7 +95,7 @@ model Room {
   dorm_id     Int
   number      Int
   access_code String @unique
-  status      room_status @default(Available)
+  // status      room_status @default(Available)
 
   // Relations
   tenant User? @relation("TenantRooms", fields: [user_id], references: [id])
@@ -104,11 +104,11 @@ model Room {
   requests Request[] @relation("RequestRoom")  // เพิ่มตรงนี้
 }
 
-enum room_status {
-  Available
-  Reported
-  Unavailable
-}
+// enum room_status {
+//   Available
+//   Reported
+//   Unavailable
+// }
 
 model Notification {
   id          Int      @id @default(autoincrement())
