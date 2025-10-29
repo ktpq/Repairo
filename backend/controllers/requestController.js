@@ -214,7 +214,7 @@ exports.getCompleteRequestForTechnician = async (req, res) => {
         })
     }
 }
-
+    
 exports.getDashboardStatus = async (req, res) => {
     const dorm_id = req.params.dorm_id;
     try {

@@ -16,8 +16,7 @@ router.get("/request/technician/complete/:dorm_id", authenticateToken, isTechnic
 router.get("/request/admin/all/:dorm_id", authenticateToken, isAdminInDorm ,requestController.getAllRequest)
 router.get("/request/admin/status/:dorm_id", authenticateToken, isAdminInDorm, requestController.getDashboardStatus)
 
-// ลบ request
-router.delete("/request/admin/:dorm_id", authenticateToken, isAdminInDorm, requestController.deleteRequestById)
+
 
 // ดู request ของตัวเอง (Incomplete / Complete)
 router.get("/request/tenant/incomplete/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getIncompleteRequest)
@@ -36,6 +35,9 @@ router.put("/request/technician/submit/:id/:dorm_id", authenticateToken, isTechn
 
 // สร้าง request ใหม่
 router.post("/request/tenant/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, upload.single('image_url'), requestController.createRequest)
+
+// ลบ request
+router.put("/request/admin/:dorm_id", authenticateToken, isAdminInDorm, requestController.deleteRequestById)
 
 router.get("/request/:id/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, requestController.getRequestById)
 router.get("/request/:id/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getRequestByIdTechnician)

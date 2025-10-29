@@ -221,16 +221,22 @@ exports.getDashboardStatus = async (dorm_id) => {
             }
         })
 
-        const cancled_report = await prisma.request.count({
+        const canceld_report = await prisma.request.count({
             where: {
                 status: "canceled",
                 dorm_id: Number(dorm_id)
             }
         })
 
-        const allReport = pending_report + inprogress_report + completed_report + cancled_report
+        const dorm = await prisma.dorm.findUnique({
+            where: {
+                id: Number(dorm_id)
+            }
+        })
+
+        const allReport = pending_report + inprogress_report + completed_report + canceld_report
         const success_rate = (completed_report * 100) / allReport
-        return { total_report, total_report_thismonth, pending_report, inprogress_report, completed_report, cancled_report, success_rate }
+        return { total_report, total_report_thismonth, pending_report, inprogress_report, completed_report, canceld_report, success_rate, dorm }
     })
     return result
     
