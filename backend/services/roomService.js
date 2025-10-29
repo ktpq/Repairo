@@ -4,6 +4,9 @@ const prisma = require('../prisma/prisma')
 
 exports.getAllRoomInDorm = async (dorm_id) => {
     return await prisma.room.findMany({
+        include: {
+            tenant: true
+        },
         where: { 
             dorm_id: Number(dorm_id)
         },
