@@ -5,16 +5,24 @@ import Navbar from "../components/Navbar";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { UserInterface } from "../interface";
+import { alertSuccess } from "../swal";
 
 export default function Profile() {
   
   const [user, setUser] = useState<UserInterface>(null);
+  const [image, setImage] = useState<File | null>(null);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   useEffect(() => {
       const fetchProfile = async () => {
         const base_api = process.env.NEXT_PUBLIC_API_URL
         const response = await axios.get(`${base_api}/myuser`, {withCredentials: true})
         setUser(response.data.user)
+        setFirstName(response.data.user.first_name)
+        setLastName(response.data.user.last_name)
+        
+        setPreviewAvatar(response.data.user.image_url ? `http://localhost:8000/${response.data.user.image_url}` : "/default-avatar.png")
       }
       fetchProfile()
   }, [])
@@ -39,21 +47,39 @@ export default function Profile() {
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const url = URL.createObjectURL(e.target.files[0]);
+      const file = e.target.files[0]
+      setImage(file)
+      const url = URL.createObjectURL(file);
       setPreviewAvatar(url);
     }
   };
 
-  const handleRemoveAvatar = () => {
-    setPreviewAvatar("/default-avatar.png");
-  };
+  // const handleRemoveAvatar = () => {
+  //   setPreviewAvatar("/default-avatar.png");
+  // };
 
-  const handleSaveProfile = () => {
-    setUserProfile((prev) => ({
-      ...prev,
-      avatar: previewAvatar,
-    }));
-    setEditProfileOpen(false);
+  const handleSaveProfile = async () => {
+    // setUserProfile((prev) => ({
+    //   ...prev,
+    //   avatar: previewAvatar,
+    // }));
+    // setEditProfileOpen(false);
+    const base_api = process.env.NEXT_PUBLIC_API_URL
+    try{
+      const formData = new FormData()
+      formData.append("first_name", firstName)
+      formData.append("last_name", lastName)
+      formData.append("image_url", image)
+      const response = await axios.put(`${base_api}/user/change-profile-info`, formData, {withCredentials: true})
+      alertSuccess("แก้ไขโปรไฟล์เรียบร้อยแล้ว").then(() => {
+        window.location.reload()
+      })
+      
+    } catch(error){
+      console.log(error.message)
+    }
+
+    console.log(image, firstName, lastName)
   };
 
   const [currentVisible, setCurrentVisible] = useState(false);
@@ -63,23 +89,23 @@ export default function Profile() {
   return (
     <div>
       <Navbar />
-
       <div className="grid grid-cols-12 my-28">
         <div className="col-span-1"></div>
-        {/* {JSON.stringify(user)} */}
+        
         <div className="col-span-10">
+          {/* {JSON.stringify(user.image_url)} */}
           {/* Card condo + Room number */}
           <div className="inline-flex items-center space-x-2 bg-[#3674B5] px-3 py-2 rounded-xl shadow-md hover:shadow-lg transition">
-            <Image
+            <img
               src={"/condo-icon.png"}
               alt="condo-icon"
               width={40}
               height={40}
               className="h-6 w-6"
             />
-            <span className="text-white font-medium">
+            {/* <span className="text-white font-medium">
               {userDorm.dormName} | {userDorm.roomNumber}
-            </span>
+            </span> */}
           </div>
 
           {/* การ์ดโปรไฟล์ (รวม Edit) */}
@@ -91,10 +117,9 @@ export default function Profile() {
             >
               <div className="flex items-center space-x-4">
                 <div className="w-16 h-16 relative">
-                  <Image
-                    src={userProfile.avatar}
+                  <img
+                    src={user?.image_url ? `http://localhost:8000/${user.image_url}` : "/default-avatar.png"}
                     alt="Profile"
-                    fill
                     className="rounded-full object-cover"
                   />
                 </div>
@@ -138,10 +163,9 @@ export default function Profile() {
                 {/* Avatar */}
                 <div className="flex items-center space-x-4">
                   <div className="w-16 h-16 relative">
-                    <Image
+                    <img
                       src={previewAvatar}
                       alt="Profile preview"
-                      fill
                       className="rounded-full object-cover"
                     />
                   </div>
@@ -153,15 +177,9 @@ export default function Profile() {
                         accept="image/*"
                         onChange={handleAvatarChange}
                         className="hidden"
+                        name="image_url"
                       />
                     </label>
-                    <button
-                      type="button"
-                      onClick={handleRemoveAvatar}
-                      className="px-4 py-2 bg-[#EA5252] text-white rounded-xl hover:bg-[#E61D1D] cursor-pointer"
-                    >
-                      Remove
-                    </button>
                   </div>
                 </div>
 
@@ -171,9 +189,9 @@ export default function Profile() {
                     <label className="text-gray-700 font-medium">First name</label>
                     <input
                       type="text"
-                      value={user.first_name}
+                      value={firstName}
                       onChange={(e) =>
-                        setUser((prev) => ({ ...prev, first_name: e.target.value }))
+                        setFirstName(e.target.value)
                       }
                       className="w-full border rounded-xl px-3 py-2"
                     />
@@ -182,9 +200,9 @@ export default function Profile() {
                     <label className="text-gray-700 font-medium">Last name</label>
                     <input
                       type="text"
-                      value={user.last_name}
+                      value={lastName}
                       onChange={(e) =>
-                        setUser((prev) => ({ ...prev, last_name: e.target.value }))
+                        setLastName(e.target.value)
                       }
                       className="w-full border rounded-xl px-3 py-2"
                     />

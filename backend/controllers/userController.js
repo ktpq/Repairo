@@ -1,6 +1,7 @@
 const userService = require('../services/userService')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const prisma = require('../prisma/prisma')
 
 exports.getCurrentLoginUser = async (req, res) =>{
     const user_id = req.user.user_id;
@@ -61,14 +62,25 @@ exports.changePassword = async (req, res) => {
     }
 }
 
-exports.changeName = async (req, res) =>{
+exports.changeProfileInfo = async (req, res) =>{
     const user_id = req.user.user_id;
-    const image_path = req.file.path
+    let image_path;
+    if (req.file){
+        image_path = req.file.path
+    } else {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: Number(user_id)
+            }
+        })
+        image_path = user.image_url
+    }
+    
     try{
-        const newName = await userService.changeName(user_id, req.body, image_path);
+        const newProfile = await userService.changeProfileInfo(user_id, req.body, image_path);
         return res.json({
             message: "Change name successfull",
-            newName
+            newProfile
         })
     } catch (error){
         res.json({

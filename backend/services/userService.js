@@ -20,7 +20,7 @@ exports.changePassword = async (user_id, hashPassword) => {
     })
 }
 
-exports.changeName = async (user_id, data, image_path) =>{
+exports.changeProfileInfo = async (user_id, data, image_path) =>{
     return await prisma.user.update({
         where:{
             id: Number(user_id)

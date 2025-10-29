@@ -89,7 +89,7 @@ export default function Room() {
                     </button>
                     <h1 className="text-5xl font-bold text-[#3674B5]">Room</h1>
                     {/* {JSON.stringify(allRoom)} */}
-                    <div className="flex gap-6 py-4">
+                    {/* <div className="flex gap-6 py-4">
                         <div className="flex items-center gap-2">
                             <div className="w-4 h-4 bg-[#3ECA3E] rounded-sm"></div>
                             <span className="text-sm text-gray-700">Available</span>
@@ -102,7 +102,7 @@ export default function Room() {
                             <div className="w-4 h-4 bg-[#EA5252] rounded-sm"></div>
                             <span className="text-sm text-gray-700">Unavailable</span>
                         </div>
-                    </div>
+                    </div> */}
 
                     {allRoom && allRoom.map((room) => (
                         <div className="w-full border-2 rounded-lg h-12 flex items-center border-[#3674B5] px-4 justify-between my-3" key={room.id}>
@@ -119,7 +119,7 @@ export default function Room() {
                             <span
                                 className="rounded-lg mr-4 flex items-center justify-center"
                             >
-                                <div className={`w-4 h-4 rounded-sm ${getStatusColor(room.status)}`}></div>
+                                {/* <div className={`w-4 h-4 rounded-sm ${getStatusColor(room.status)}`}></div> */}
                             </span>
 
                             <div className="flex gap-2">
