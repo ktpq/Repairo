@@ -132,7 +132,7 @@ export default function OwnedDorm() {
                     <div className="flex items-center justify-between">
                         <h1 className="text-black font-bold text-3xl">Recent Requests</h1>
                         <div className="flex gap-2">
-                            <Link href="/all-report" className="flex items-center space-x-2">
+                            <Link href={`/all-report/${dorm_id}`} className="flex items-center space-x-2">
                                 <button
                                     type="button"
                                     className="px-4 py-2 bg-[#CAE4FF] text-[#3674B5] shadow-md rounded-xl hover:bg-sky-200 transition cursor-pointer"

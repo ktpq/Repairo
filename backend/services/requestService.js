@@ -235,7 +235,7 @@ exports.getDashboardStatus = async (dorm_id) => {
         })
 
         const allReport = pending_report + inprogress_report + completed_report + canceld_report
-        const success_rate = (completed_report * 100) / allReport
+        const success_rate = ((completed_report * 100) / allReport).toFixed(2)
         return { total_report, total_report_thismonth, pending_report, inprogress_report, completed_report, canceld_report, success_rate, dorm }
     })
     return result

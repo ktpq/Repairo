@@ -1,11 +1,16 @@
 "use client"
 import Navbar from "@/app/components/Navbar";
-import Reported from "../components/dorm/Reported";
+import ReportOwner from "@/app/components/ReportOwner";
 import { useRouter } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
+import { useParams } from "next/navigation";
+
+
 
 export default function AllReport() {
     const router = useRouter()
+    const params = useParams()
+    const dorm_id = Number(params.id)
     return (
         <div>
             <Navbar />
@@ -21,7 +26,7 @@ export default function AllReport() {
                         Back
                     </button>
                     <h1 className="text-5xl font-bold text-[#3674B5] pb-8">All Report</h1>
-                    <Reported showEdit={false} />
+                    <ReportOwner dorm_id={dorm_id}/>
                 </div>
 
                 <div className="col-span-1"></div>
