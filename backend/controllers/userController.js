@@ -4,13 +4,26 @@ const bcrypt = require('bcrypt')
 const prisma = require('../prisma/prisma')
 
 exports.getCurrentLoginUser = async (req, res) =>{
-    const user_id = req.user.user_id;
+    // const user_id = req.user.user_id;
     try {
+        const token = req.cookies.authToken
+
+        if (!token){
+            return res.json({
+                user: null,
+                isLogin: false
+            })
+        }
+
+        const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
+        const user_id = decodedToken.user_id
         const user = await userService.getUserById(user_id);
+
         return res.json({
-            message: "Get user by id success",
-            user
+            user,
+            isLogin: true
         })
+        
     } catch (error){
         res.json({
             "error": error.message
