@@ -1,12 +1,76 @@
 "use client"
 import Navbar from "@/app/components/Navbar";
-import { useRouter } from "next/navigation"
+import axios from "axios";
+import { useRouter, useParams } from "next/navigation"
 import { ArrowLeft, Trash } from "lucide-react"
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { UserInterface } from "@/app/interface";
+import { alertSuccess } from "@/app/swal";
+
+interface allUser{
+    id: number
+    user_id: number
+    dorm_id: number
+    role: string
+    room_id: number | null
+    user: UserInterface
+
+}
 
 export default function Permission() {
     const router = useRouter();
+    const params = useParams();
     const [showConfirm, setShowConfirm] = useState(false);
+    const [allUser, setAllUser] = useState<allUser[]>()
+    const dorm_id = Number(params.id)
+
+    const [currentId, setCurrentId] = useState<number>(0)
+    const [currentRole, setCurrentRole] = useState<string>("")
+
+    useEffect(() => {
+        const base_api = process.env.NEXT_PUBLIC_API_URL
+        const fetchAllUser = async () => {
+            const response = await axios.get(`${base_api}/dorm/user/${dorm_id}`, {withCredentials: true})
+            console.log(response.data)
+            setAllUser(response.data.allUser)
+        }
+        fetchAllUser()
+    }, [])
+
+    const showModal = (user_id: number, role: string) => {
+        setShowConfirm(true);
+        setCurrentId(user_id)
+        setCurrentRole(role)
+        
+    }
+
+    const closeModal = () => {
+        setShowConfirm(false);
+        setCurrentId(0)
+        setCurrentRole("")
+    }
+
+    const deleteUser = async () => {
+        console.log("delete")
+        const base_api = process.env.NEXT_PUBLIC_API_URL
+        try{
+            if (currentRole === "Tenant"){
+                // ถ้าจะลบ Tenant ออกจากหอ
+                await axios.delete(`${base_api}/user/tenant/${currentId}/${dorm_id}`, {withCredentials: true})
+                alertSuccess("ลบสําเร็จ").then(() => {
+                    window.location.reload()
+                })
+            } else {
+                // ถ้าจะลบ Technician ออกจากหอ
+                await axios.delete(`${base_api}/user/technician/${currentId}/${dorm_id}`, {withCredentials: true})
+                alertSuccess("ลบสําเร็จ").then(() => {
+                    window.location.reload()
+                })
+            }
+        } catch (error){
+            console.log(error.message)
+        }
+    }
 
     return (
         <div>
@@ -23,31 +87,42 @@ export default function Permission() {
                         Back
                     </button>
                     <h1 className="text-5xl font-bold text-[#3674B5]">Permission</h1>
-
-                    <div className="mb-2 mt-4">
-                        <div className="flex items-center px-4 text-gray-500 gap-26">
-                            <span>ID</span>
-                            <span>Name</span>
-                            <span className="ps-30">Email</span>
-                        </div>
+                    {/* {JSON.stringify(allUser)} */}
+                    <div className="mt-6">
+                    {/* หัวตาราง */}
+                    <div className="grid grid-cols-[100px_1.5fr_2fr_180px_60px] items-center px-6 py-2 text-gray-500 border-b">
+                        <span className="font-semibold">ID</span>
+                        <span className="font-semibold">Name</span>
+                        <span className="font-semibold">Email</span>
+                        <span className="font-semibold">Role</span>
+                        <span className="text-center font-semibold">Action</span>
                     </div>
 
-                    <div className="w-full border-2 rounded-lg h-12 flex items-center border-[#3674B5] px-4 justify-between">
-                        <div className="flex items-center gap-16">
-                            <span className="flex items-center rounded-md text-lg">#U001</span>
-                            <span className="flex items-center rounded-md text-lg">Name Surname</span>
-                            <span className="flex items-center rounded-md text-lg ps-20">repairo@test.com</span>
-                        </div>
+                    {/* เนื้อหา */}
+                    {allUser && allUser.map((user) => (
+                        <div
+                        key={user.id}
+                        className="grid grid-cols-[100px_1.5fr_2fr_180px_60px] items-center px-6 py-3 border-b hover:bg-[#f9fbff] transition"
+                        >
+                        <span className="text-lg text-gray-800">U{user.user_id}</span>
+                        <span className="text-lg text-gray-700 truncate">
+                            {user.user.first_name} {user.user.last_name}
+                        </span>
+                        <span className="text-lg text-gray-700 truncate">{user.user.email}</span>
+                        <span className="text-lg text-gray-700">{user.role}</span>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex justify-center">
                             <button
-                                className="cursor-pointer"
-                                onClick={() => setShowConfirm(true)}
+                            className="text-[#EA5252] hover:text-red-600 transition cursor-pointer"
+                            onClick={() => showModal(user.user.id, user.role)}
                             >
-                                <Trash className="w-5 h-5" />
+                            <Trash className="w-5 h-5" />
                             </button>
                         </div>
+                        </div>
+                    ))}
                     </div>
+
 
                     {/* Confirm Modal */}
                     {showConfirm && (
@@ -56,15 +131,14 @@ export default function Permission() {
                                 <h2 className="text-lg font-bold mb-6 text-center">Are you sure you want to delete?</h2>
                                 <div className="flex justify-center gap-4">
                                     <button
-                                        onClick={() => setShowConfirm(false)}
+                                        onClick={() => closeModal()}
                                         className="px-4 py-2 rounded-lg border hover:bg-gray-100 transition cursor-pointer"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         onClick={() => {
-                                            setShowConfirm(false);
-                                            // delete logic
+                                            deleteUser();
                                         }}
                                         className="px-4 py-2 bg-[#EA5252] text-white rounded-lg hover:bg-red-600 transition cursor-pointer"
                                     >

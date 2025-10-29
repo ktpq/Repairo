@@ -129,3 +129,19 @@ exports.joinDormAsTechnician = async (req, res) => {
         })
     }
 }
+
+exports.getUserInDorm = async (req, res) => {
+    const { dorm_id } = req.params;
+    const admin_id = req.user.user_id;
+    try{
+        const allUser = await dormService.getUserInDorm(dorm_id, admin_id);
+        res.json({
+            message: "Get user in dorm successfully",
+            allUser
+        })
+    } catch (erorr){
+        res.json({
+            error: error.message
+        })
+    }
+}

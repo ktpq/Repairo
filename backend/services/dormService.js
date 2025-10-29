@@ -151,3 +151,20 @@ exports.joinDormAsTechnician = async (user_id, dorm) => {
         }
     })
 }
+
+exports.getUserInDorm = async (dorm_id, admin_id) => {
+  return await prisma.userDormRole.findMany({
+      where: {
+          dorm_id: Number(dorm_id),
+          user_id: {
+            not: Number(admin_id)
+          }
+      },
+      include: {
+        user: true
+      },
+      orderBy: {
+        user_id: "asc"
+      }
+  })
+}

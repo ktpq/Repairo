@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const dormController = require('../controllers/dormController')
-const {authenticateToken}  = require("../middlewares/middleware")
+const {authenticateToken, isAdminInDorm}  = require("../middlewares/middleware")
 
 router.post('/dorm/join/tenant', authenticateToken, dormController.joinDormAsTenant)
 router.post('/dorm/join/technician', authenticateToken, dormController.joinDormAsTechnician)
@@ -12,6 +12,7 @@ router.get('/dorm/user', authenticateToken, dormController.getDormByUserId)
 router.get('/dorm/owner', authenticateToken, dormController.getDormOwner)
 router.get('/dorm/technician', authenticateToken, dormController.getDormTechnician)
 
+router.get('/dorm/user/:dorm_id', authenticateToken, isAdminInDorm, dormController.getUserInDorm)
 router.get('/dorm/:id', authenticateToken, dormController.getDormById)
 
 

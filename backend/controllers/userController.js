@@ -76,3 +76,33 @@ exports.changeName = async (req, res) =>{
         })
     }
 }
+
+exports.deleteTenantUser = async (req, res) => {
+    const { id, dorm_id } = req.params;
+    try{
+        const result = await userService.deleteTenantUser(id, dorm_id);
+        res.json({
+            message: "Delete user successfully",
+            result
+        })
+    } catch (error){
+        res.json({
+            error: error.message
+        })
+    }
+}
+
+exports.deleteTechnicianUser = async (req, res) => {
+    const { id, dorm_id } = req.params;
+    try{
+        const result = await userService.deleteTechnicianUser(id, dorm_id);
+        res.json({
+            message: "Delete user successfully",
+            result
+        })
+    } catch (error){
+        res.json({
+            error: error.message
+        })
+    }
+}
