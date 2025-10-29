@@ -171,6 +171,22 @@ export default function TicketDetail() {
                                     {request.dorm?.dorm_name || "No dorm"}
                                 </p>
                             </div>
+
+                            {request?.status === "completed" && request?.submit_image_url ? (
+                            <div className="flex flex-col w-fit">
+                                <h3 className="flex items-center gap-2 font-bold text-black text-2xl mt-7">
+                                Repair result
+                                </h3>
+
+                                <img 
+                                src={`http://localhost:8000/${request.submit_image_url}`}
+                                alt="Dorm Image" 
+                                className="w-full max-w-md h-64 object-cover rounded-2xl border-4 border-[#3875b5] shadow-lg mx-auto mt-4"
+                                />
+                            </div>
+                            ): (
+                                <h1 className="text-xl font-bold mt-7"> ไม่มีรูปภาพผลลัพธ์ </h1>
+                            )}
                         </section>
 
                         <section>
