@@ -1,4 +1,6 @@
 const requestService = require('../services/requestService')
+// const sendEmail = require('../sendEmail')
+const { sendEmail } = require('../sendEmail')
 
 exports.getAllRequest = async (req, res) => {
     const { dorm_id } = req.params
@@ -172,6 +174,7 @@ exports.acceptRequest  = async (req, res) =>{
     const user_id = req.user.user_id;
     try{
         const result = await requestService.acceptRequest(id, user_id)
+        sendEmail(result.user.email, "คำขอของคุณได้รับการยอมรับแล้ว", `มีช่างรับคำขอ ${result.topic} ของคุณแล้วกรุณารอช่างอยู่ที่ห้องของท่านในเวลาทำการ`)
         return res.json({
             message: "Accept request successfully",
             result

@@ -145,6 +145,9 @@ exports.getNoTechRequest = async (dorm_id) => {
 
 exports.acceptRequest = async (id, user_id) => {
     return await prisma.request.update({
+        include: {
+            user: true
+        },
         where: {
             id: Number(id)
         },
