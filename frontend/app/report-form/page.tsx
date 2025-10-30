@@ -44,7 +44,7 @@ export default function ReportForm() {
 
                 const formatDate = response.data.request.request_date ? new Date(response.data.request.request_date).toISOString().slice(0, 16) : ""
                 setAppointment(formatDate)
-                setPreview(`http://localhost:8000/${response.data.request.image_url}`)
+                setPreview(response.data.request.image_url)
                 
             }
            fetchUser()

@@ -4,10 +4,10 @@ const express = require('express')
 const router = express.Router()
 
 const requestController = require('../controllers/requestController')
-const { authenticateToken, authorizeDormAccess, isAdminInDorm, isTechnicianInDorm, upload }  = require("../middlewares/middleware")
+const { authenticateToken, authorizeDormAccess, isAdminInDorm, isTechnicianInDorm, upload, uploadS3 }  = require("../middlewares/middleware")
 
 
-router.put("/request/tenant/:id/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, upload.single('image_url'), requestController.updateRequest)
+router.put("/request/tenant/:id/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, uploadS3.single('image_url'), requestController.updateRequest)
 
 // ดู request ทั้งหมดในหอ
 router.get("/request/technician/incomplete/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.getIncompleteRequestForTechnician)
@@ -31,10 +31,10 @@ router.get("/request/technician/notech/:dorm_id", authenticateToken, isTechnicia
 // อัพเดตสถานะ / Hand-in
 router.put("/request/technician/change-status/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.changeRequestStatus)
 router.put("/request/technician/accept/:id/:dorm_id", authenticateToken, isTechnicianInDorm, requestController.acceptRequest)
-router.put("/request/technician/submit/:id/:dorm_id", authenticateToken, isTechnicianInDorm, upload.single('image_url'), requestController.submitRequest)
+router.put("/request/technician/submit/:id/:dorm_id", authenticateToken, isTechnicianInDorm, uploadS3.single('image_url'), requestController.submitRequest)
 
 // สร้าง request ใหม่
-router.post("/request/tenant/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, upload.single('image_url'), requestController.createRequest)
+router.post("/request/tenant/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, uploadS3.single('image_url'), requestController.createRequest)
 
 // ลบ request
 router.put("/request/admin/:dorm_id", authenticateToken, isAdminInDorm, requestController.deleteRequestById)

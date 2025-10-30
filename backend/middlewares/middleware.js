@@ -1,8 +1,14 @@
 const jwt = require('jsonwebtoken')
 const prisma = require('../prisma/prisma')
 const multer = require('multer');
+const multerS3 = require('multer-s3');
 const path = require('path');
+const AWS = require('aws-sdk');
+require('dotenv').config()
+const { S3Client } = require('@aws-sdk/client-s3')
 
+
+// upload ปกติ
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/')  // โฟลเดอร์นี้ต้องสร้างไว้ล่วงหน้า
@@ -14,6 +20,33 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage: storage });
+
+
+const s3 = new S3Client({
+    region: process.env.AWS_REGION,
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        sessionToken: process.env.AWS_SESSION_TOKEN
+    },
+})
+
+const uploadS3 = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: process.env.AWS_BUCKET_NAME,
+        // acl: "public-read",
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        key: (req, file, cb) => {
+            const timestamp = Date.now();               // เวลาปัจจุบันเป็นตัวเลข
+            const ext = path.extname(file.originalname); // .jpg, .png
+            const filename = `${timestamp}${ext}`;      // เช่น 1700000000000.jpg
+            cb(null, filename);
+        }
+    })
+})
+
+
 
 const authenticateToken = (req, res, next) => {
     const token = req.cookies.authToken;
@@ -142,5 +175,6 @@ module.exports = {
     authorizeDormAccess,
     isAdminInDorm,
     isTechnicianInDorm,
-    upload
+    upload,
+    uploadS3
 }

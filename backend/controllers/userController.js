@@ -79,7 +79,7 @@ exports.changeProfileInfo = async (req, res) =>{
     const user_id = req.user.user_id;
     let image_path;
     if (req.file){
-        image_path = req.file.path
+        image_path = req.file.location
     } else {
         const user = await prisma.user.findUnique({
             where: {

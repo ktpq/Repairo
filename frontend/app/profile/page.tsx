@@ -22,7 +22,7 @@ export default function Profile() {
         setFirstName(response.data.user.first_name)
         setLastName(response.data.user.last_name)
         
-        setPreviewAvatar(response.data.user.image_url ? `http://localhost:8000/${response.data.user.image_url}` : "/default-avatar.png")
+        setPreviewAvatar(response.data.user.image_url)
       }
       fetchProfile()
   }, [])
@@ -118,7 +118,7 @@ export default function Profile() {
               <div className="flex items-center space-x-4">
                 <div className="w-16 h-16 relative">
                   <img
-                    src={user?.image_url ? `http://localhost:8000/${user.image_url}` : "/default-avatar.png"}
+                    src={user?.image_url}
                     alt="Profile"
                     className="rounded-full object-cover"
                   />
