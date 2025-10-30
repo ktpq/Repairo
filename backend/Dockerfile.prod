@@ -1,0 +1,18 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY . .
+
+# ติดตั้ง dependencies
+# COPY package*.json ./
+RUN npm install
+
+COPY prisma ./prisma
+RUN npx prisma generate
+
+EXPOSE 8000
+
+# ใช้คำสั่ง dev (nodemon)
+# test edit
+CMD ["npm", "run", "dev"]

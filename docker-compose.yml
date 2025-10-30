@@ -33,7 +33,6 @@
       depends_on:
         - db
 
-
     frontend:
       container_name: repairo-frontend
       restart: always
