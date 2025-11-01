@@ -30,8 +30,8 @@
         - ./backend/.env
       ports:
         - "8000:8000"
-      depends_on:
-        - db
+      # depends_on:
+      #   - db
 
     frontend:
       container_name: repairo-frontend

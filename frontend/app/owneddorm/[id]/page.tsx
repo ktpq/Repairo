@@ -45,6 +45,7 @@ export default function OwnedDorm() {
                     <div className="col-span-10">
                     <div className="flex items-center justify-between">
                         <h1 className="text-[#3674B5] font-bold text-5xl">{allStatus?.dorm.dorm_name}</h1>
+                        <h1 className="text-[#3674B5] font-bold text-2xl">Technician code : {allStatus?.dorm.tech_code}</h1>
                         <div className="flex gap-2">
                             <Link href={`/room/${dorm_id}`} className="flex items-center space-x-2">
                                 <button

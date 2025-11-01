@@ -8,4 +8,5 @@ RUN npm install
 
 EXPOSE 3000
 # ใช้คำสั่ง dev (nodemon)
-CMD ["npm", "run", "dev"]
+# CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "dev", "--", "--hostname", "0.0.0.0"]

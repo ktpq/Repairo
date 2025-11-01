@@ -1,7 +1,10 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    allowedDevOrigins: [
+      "http://localhost:3000",
+      "http://app-alb-449523791.us-east-1.elb.amazonaws.com",
+    ],
+  },
 };
-
-export default nextConfig;
+module.exports = nextConfig;
