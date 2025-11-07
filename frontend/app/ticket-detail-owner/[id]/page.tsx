@@ -179,7 +179,7 @@ export default function TicketDetail() {
                                 </h3>
 
                                 <img 
-                                src={request.submit_image_url}
+                                src={`http://localhost:8000/${request.submit_image_url}`}
                                 alt="Dorm Image" 
                                 className="w-full max-w-md h-64 object-cover rounded-2xl border-4 border-[#3875b5] shadow-lg mx-auto mt-4"
                                 />
@@ -191,7 +191,7 @@ export default function TicketDetail() {
 
                         <section className="flex flex-col space-y-4">
                             <img 
-                                src={request.image_url}
+                                src={`http://localhost:8000/${request.image_url}`}
                                 alt="Dorm Image" 
                                 className="w-full max-w-md h-64 object-cover rounded-2xl border-4 border-[#3875b5] shadow-lg mx-auto"
                             />

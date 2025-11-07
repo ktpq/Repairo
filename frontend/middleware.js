@@ -19,10 +19,15 @@ export async function middleware(req){
     const isLogin = data.isLogin;
 
 
+
     // zone middleeware เริ่มตรงนี้ 
     if (!isLogin && pathname !== "/login" && pathname !== "/register") {
       return NextResponse.redirect(new URL("/login", req.url));
     }
+
+    console.log(isLogin)
+    
+    return NextResponse.next();
 
 }
 

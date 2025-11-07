@@ -12,6 +12,6 @@ router.delete("/user/tenant/:id/:dorm_id", authenticateToken, isAdminInDorm, use
 router.delete("/user/technician/:id/:dorm_id", authenticateToken, isAdminInDorm, userController.deleteTechnicianUser)
 
 router.put("/user/change-password", authenticateToken, userController.changePassword)
-router.put("/user/change-profile-info", authenticateToken, uploadS3.single('image_url'), userController.changeProfileInfo)
+router.put("/user/change-profile-info", authenticateToken, upload.single('image_url'), userController.changeProfileInfo)
 
 module.exports = router

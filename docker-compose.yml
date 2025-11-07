@@ -27,7 +27,7 @@
         - /app/node_modules
         # - /app/prisma
       env_file:
-        - ./backend/.env
+        - ./backend/.env.local
       ports:
         - "8000:8000"
       depends_on:
@@ -44,7 +44,7 @@
         - ./frontend:/app
         - /app/node_modules
       env_file:
-        - ./frontend/.env
+        - ./frontend/.env.local
       ports:
         - "3000:3000"
       environment:

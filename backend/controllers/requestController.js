@@ -85,7 +85,7 @@ exports.createRequest =  async (req, res) =>{
     const user_id = req.user.user_id
     const data = req.body
     console.log(req.file)
-    const imagePath = req.file ? req.file.location : null;
+    const imagePath = req.file ? req.file.path : null;
 
     try {
         const newRequest = await requestService.createRequest(dorm_id, room_id, user_id, data, imagePath);
@@ -105,7 +105,7 @@ exports.updateRequest = async (req, res) => {
     let imagePath;
     if (req.file){
         // ถ้าส่ง file มาให้ใช้อันใหม่
-        imagePath = req.file ? req.file.location : null;
+        imagePath = req.file ? req.file.path : null;
     } else {
         // ถ้าไม่ได้ส่งไฟล์มาให้ใช้อันเดิม
         const currentRequest = await requestService.getRequestById(id);
@@ -237,7 +237,7 @@ exports.submitRequest = async (req, res) => {
     const { id, dorm_id } = req.params;
     let image_path;
     if (req.file){
-        image_path = req.file.location
+        image_path = req.file.path
     } else {
         image_path = null
     }

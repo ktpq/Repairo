@@ -31,7 +31,12 @@ export default function CreateDormButton() {
         // };
         
         try {
-            const response = await axios.post(`${base_api}/dorm`, {dorm_name: name, dorm_room: rooms, dorm_mapurl: mapLink, dorm_line: lineID}, {withCredentials: true})
+            const match = mapLink.match(/src="([^"]*)"/)
+            let mapUrl = ""
+            if (match && match[1]){
+                mapUrl = match[1]
+            }
+            const response = await axios.post(`${base_api}/dorm`, {dorm_name: name, dorm_room: rooms, dorm_mapurl: mapUrl, dorm_line: lineID}, {withCredentials: true})
             console.log(response.data)
             alertSuccess("สร้างหอพักสําเร็จ").then(() => {
                 window.location.reload()

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { UserDormRoleInterface } from "../interface";
+// import { UserDormRoleInterface } from "../interface";
 import Navbar from "../components/Navbar";
 import CreateDormButton from "../components/CreateDormButton";
 import OwnedCard from "../components/OwnedCard";
