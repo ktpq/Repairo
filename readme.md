@@ -19,6 +19,7 @@
 ## 🛠️ Tech Stack
 
 * **Frontend:** Next.js (TypeScript)
+* **Styling:** Tailwind css
 * **Backend:** Express.js
 * **Database:** PostgreSQL + Prisma ORM
 * **Container / Dev:** Docker Compose
