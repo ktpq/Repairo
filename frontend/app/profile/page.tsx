@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { UserInterface } from "../interface";
-import { alertSuccess } from "../swal";
+import { alertSuccess, alertFailed } from "../swal";
 
 export default function Profile() {
   
@@ -13,6 +13,8 @@ export default function Profile() {
   const [image, setImage] = useState<File | null>(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+
+  
 
   useEffect(() => {
       const fetchProfile = async () => {
@@ -28,22 +30,14 @@ export default function Profile() {
   }, [])
 
   // mock data
-  const userDorm = {
-    dormName: "Condo A",
-    roomNumber: "123/456",
-  };
-
-  const [userProfile, setUserProfile] = useState({
-    firstName: "Name",
-    lastName: "Surname",
-    email: "username@gmail.com",
-    avatar: "/default-avatar.png",
-  });
+  
 
 
   const [showModal, setShowModal] = useState(false);
   const [editProfileOpen, setEditProfileOpen] = useState(false);
-  const [previewAvatar, setPreviewAvatar] = useState(userProfile.avatar);
+  const [previewAvatar, setPreviewAvatar] = useState("");
+
+
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -85,6 +79,32 @@ export default function Profile() {
   const [currentVisible, setCurrentVisible] = useState(false);
   const [newVisible, setNewVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
+
+
+  const [currentPassword, setCurrentPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  
+  const handleChangePassword = async () => {
+    console.log(currentPassword, newPassword, confirmPassword)
+    if (newPassword !== confirmPassword) {
+        return alertFailed("รหัสผ่านทั้ง 2 ช่องไม่ตรงกัน")
+    }
+    try{
+      const base_api = process.env.NEXT_PUBLIC_API_URL
+      const response = await axios.put(`${base_api}/user/change-password`, {old_password:currentPassword, new_password: newPassword, confirm_password: confirmPassword}, {withCredentials: true})
+      if (response.data.message !== "เปลี่ยนรหัสผ่านสำเร็จ"){
+        return alertFailed(response.data.message)
+      }
+
+      alertSuccess("เปลี่ยนรหัสผ่านสำเร็จ").then(() => {
+        window.location.reload()
+      })
+      
+    } catch (error){
+      console.log(error.message)
+    }
+  }
 
   return (
     <div>
@@ -250,7 +270,8 @@ export default function Profile() {
                   type={currentVisible ? "text" : "password"}
                   placeholder="Current password"
                   className="w-full border rounded-xl px-3 py-2 pr-10"
-                />
+                  onChange = {(e) => setCurrentPassword(e.target.value)}
+                  />
                 <button
                   type="button"
                   onClick={() => setCurrentVisible(!currentVisible)}
@@ -271,6 +292,7 @@ export default function Profile() {
                   type={newVisible ? "text" : "password"}
                   placeholder="New password"
                   className="w-full border rounded-xl px-3 py-2 pr-10"
+                onChange={(e) => setNewPassword(e.target.value)}
                 />
                 <button
                   type="button"
@@ -292,6 +314,7 @@ export default function Profile() {
                   type={confirmVisible ? "text" : "password"}
                   placeholder="Confirm new password"
                   className="w-full border rounded-xl px-3 py-2 pr-10"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <button
                   type="button"
@@ -315,7 +338,7 @@ export default function Profile() {
                 >
                   Cancel
                 </button>
-                <button className="px-4 py-2 rounded-lg bg-[#3674B5] text-white hover:bg-sky-600 cursor-pointer">
+                <button className="px-4 py-2 rounded-lg bg-[#3674B5] text-white hover:bg-sky-600 cursor-pointer" onClick={handleChangePassword}>
                   Save
                 </button>
               </div>

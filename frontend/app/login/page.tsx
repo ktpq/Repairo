@@ -17,7 +17,7 @@ export default function LoginPage() {
     const base_api = process.env.NEXT_PUBLIC_API_URL
     try{
       const response = await axios.post(`${base_api}/login`, {email, password}, {withCredentials: true})
-      if (response.data.message === "ไม่พบผู้ใช้ในระบบ") {
+      if (response.data.message !== "เข้าสู่ระบบสำเร็จ") {
         return alertFailed(response.data.message)
       }
 
