@@ -99,15 +99,16 @@ export default function CreateDormButton() {
                             </div>
 
                             <div className="mb-3">
-                                <label className="block mb-1 font-semibold">Google Map Link <span className="text-red-500">*</span></label>
+                                <label className="block mb-1 font-semibold">Google Map iframe <span className="text-red-500">*</span> <a href="https://youtube.com/shorts/y6DiF10wT0Y?si=HqXqNI1s6C0z_nL8" target="_blank" className="text-blue-500"> ?</a></label>
                                 <input
                                     type="text"
                                     value={mapLink}
                                     onChange={(e) => setMapLink(e.target.value)}
-                                    placeholder="Google Map Link"
+                                    placeholder="Google Map iframe"
                                     required
                                     className="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#3674B5]"
                                 />
+                                
                             </div>
 
                             <div className="mb-4">

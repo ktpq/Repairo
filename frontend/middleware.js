@@ -4,7 +4,7 @@ import axios from "axios";
 
 export async function middleware(req){
     const { pathname } = req.nextUrl
-    const base_api = process.env.NEXT_PUBLIC_API_URL
+    const base_api = process.env.API_URL
     console.log("Middleware เริ่มทำงาน", pathname)
     
     const response = await fetch(`${base_api}/myuser`, {
