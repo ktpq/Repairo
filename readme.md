@@ -27,32 +27,33 @@
 ---
 
 ## 🚀 Quick Start (Local)
+1. เปิด Docker Desktop
 
-1. โคลนโปรเจกต์
+2. โคลนโปรเจกต์
 
 ```bash
 git clone https://github.com/ktpq/Repairo
 ```
 
-2. เข้าโฟลเดอร์โปรเจกต์
+3. เข้าโฟลเดอร์โปรเจกต์
 
 ```bash
 cd Repairo
 ```
 
-3. รันด้วย Docker Compose
+4. รันด้วย Docker Compose
 
 ```bash
 docker compose up -d
 ```
 
-4. รัน Prisma migration (สร้างตารางใน DB)
+5. รัน Prisma migration (สร้างตารางใน DB)
 
 ```bash
 docker exec -it repairo-backend sh -c "npx prisma migrate dev --name 'migrate'"
 ```
 
-5. เปิดเว็บที่
+6. เปิดเว็บที่
 
 👉 `http://localhost:3000`
 
