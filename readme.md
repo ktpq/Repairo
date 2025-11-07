@@ -44,7 +44,7 @@ cd Repairo
 4. รันด้วย Docker Compose
 
 ```bash
-docker compose up -d
+docker compose up -d --build
 ```
 
 5. รัน Prisma migration (สร้างตารางใน DB)
