@@ -1,13 +1,16 @@
-FROM node:22
+FROM node:20-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY ./package.json ./
-
+# ติดตั้ง dependencies
+COPY package*.json ./
 RUN npm install
 
-COPY ./index.js ./
+COPY prisma ./prisma
+RUN npx prisma generate
 
 EXPOSE 8000
 
-CMD ["node", "index.js"]
+# ใช้คำสั่ง dev (nodemon)
+# test edit
+CMD ["npm", "run", "dev"]
