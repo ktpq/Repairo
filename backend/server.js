@@ -33,16 +33,16 @@ const requestRouter = require('./routers/requestRouter')
 app.use("/api", requestRouter)
 
 const roomRouter = require('./routers/roomRouter');
-const { uploadS3, authenticateToken } = require('./middlewares/middleware');
+const { authenticateToken } = require('./middlewares/middleware');
 app.use("/api", roomRouter)
 
-app.post('/api/upload', uploadS3.single('image_url'), (req, res) => {
-  try{
-    res.send("upload")
-  } catch (error){
-    res.send(error.message)
-  }
-})
+// app.post('/api/upload', uploadS3.single('image_url'), (req, res) => {
+//   try{
+//     res.send("upload")
+//   } catch (error){
+//     res.send(error.message)
+//   }
+// })
 
 
 app.listen(port, () => {

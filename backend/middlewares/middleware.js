@@ -22,29 +22,29 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-const s3 = new S3Client({
-    region: process.env.AWS_REGION,
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-        sessionToken: process.env.AWS_SESSION_TOKEN
-    },
-})
+// const s3 = new S3Client({
+//     region: process.env.AWS_REGION,
+//     credentials: {
+//         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+//         sessionToken: process.env.AWS_SESSION_TOKEN
+//     },
+// })
 
-const uploadS3 = multer({
-    storage: multerS3({
-        s3: s3,
-        bucket: process.env.AWS_BUCKET_NAME,
-        // acl: "public-read",
-        contentType: multerS3.AUTO_CONTENT_TYPE,
-        key: (req, file, cb) => {
-            const timestamp = Date.now();               // เวลาปัจจุบันเป็นตัวเลข
-            const ext = path.extname(file.originalname); // .jpg, .png
-            const filename = `${timestamp}${ext}`;      // เช่น 1700000000000.jpg
-            cb(null, filename);
-        }
-    })
-})
+// const uploadS3 = multer({
+//     storage: multerS3({
+//         s3: s3,
+//         bucket: process.env.AWS_BUCKET_NAME,
+//         // acl: "public-read",
+//         contentType: multerS3.AUTO_CONTENT_TYPE,
+//         key: (req, file, cb) => {
+//             const timestamp = Date.now();               // เวลาปัจจุบันเป็นตัวเลข
+//             const ext = path.extname(file.originalname); // .jpg, .png
+//             const filename = `${timestamp}${ext}`;      // เช่น 1700000000000.jpg
+//             cb(null, filename);
+//         }
+//     })
+// })
 
 
 
@@ -176,5 +176,5 @@ module.exports = {
     isAdminInDorm,
     isTechnicianInDorm,
     upload,
-    uploadS3
+    // uploadS3
 }

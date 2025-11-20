@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router()
 
 const requestController = require('../controllers/requestController')
-const { authenticateToken, authorizeDormAccess, isAdminInDorm, isTechnicianInDorm, upload, uploadS3 }  = require("../middlewares/middleware")
+const { authenticateToken, authorizeDormAccess, isAdminInDorm, isTechnicianInDorm, upload }  = require("../middlewares/middleware")
 
 
 router.put("/request/tenant/:id/:dorm_id/:room_id", authenticateToken, authorizeDormAccess, upload.single('image_url'), requestController.updateRequest)

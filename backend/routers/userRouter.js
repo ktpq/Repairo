@@ -3,7 +3,7 @@ const router = express.Router()
 
 const userController = require('../controllers/userController')
 
-const { authenticateToken, upload, isAdminInDorm, uploadS3 } =  require('../middlewares/middleware')
+const { authenticateToken, upload, isAdminInDorm } =  require('../middlewares/middleware')
 
 
 router.get("/myuser", userController.getCurrentLoginUser)
